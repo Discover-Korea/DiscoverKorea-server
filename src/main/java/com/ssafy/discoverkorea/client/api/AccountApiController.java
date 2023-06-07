@@ -25,7 +25,14 @@ public class AccountApiController {
     @PostMapping("/signup")
     public void signup(@Valid @RequestBody SignupMemberRequest request) {
         log.debug("SignupMemberRequest={}", request);
-        SignupMemberDto dto = SignupMemberDto.builder()
+        SignupMemberDto dto = toSignupMemberDto(request);
+
+        Long memberId = memberService.signup(dto);
+        log.debug("signup member={}", memberId);
+    }
+
+    private SignupMemberDto toSignupMemberDto(SignupMemberRequest request) {
+        return SignupMemberDto.builder()
                 .loginId(request.getLoginId())
                 .loginPw(request.getLoginPw())
                 .name(request.getName())
@@ -35,7 +42,5 @@ public class AccountApiController {
                 .gender(request.getGender())
                 .nickname(request.getNickname())
                 .build();
-        Long memberId = memberService.signup(dto);
-        log.debug("signup member={}", memberId);
     }
 }
