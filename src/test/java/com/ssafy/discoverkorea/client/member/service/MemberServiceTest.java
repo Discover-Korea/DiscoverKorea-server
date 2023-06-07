@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.client.member.service;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
+import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.ssafy.discoverkorea.client.member.Gender.*;
-import static com.ssafy.discoverkorea.common.entity.Active.*;
-import static org.assertj.core.api.Assertions.*;
+import static com.ssafy.discoverkorea.client.member.Gender.MALE;
+import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
