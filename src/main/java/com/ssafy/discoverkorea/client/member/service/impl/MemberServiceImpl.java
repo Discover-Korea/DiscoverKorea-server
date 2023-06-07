@@ -21,27 +21,47 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long signup(SignupMemberDto dto) {
-        Optional<Long> loginId = memberRepository.existLoginId(dto.getLoginId());
-        if (loginId.isPresent()) {
+        duplicateLoginId(dto.getLoginId());
+        duplicateTel(dto.getTel());
+        duplicateEmail(dto.getEmail());
+        duplicateNickname(dto.getNickname());
+
+        Member member = createMember(dto);
+
+        Member savedMember = memberRepository.save(member);
+        return savedMember.getId();
+    }
+
+    private void duplicateLoginId(String loginId) {
+        Optional<Long> existLoginId = memberRepository.existLoginId(loginId);
+        if (existLoginId.isPresent()) {
             throw new DuplicateException();
         }
+    }
 
-        Optional<Long> tel = memberRepository.existTel(dto.getTel());
-        if (tel.isPresent()) {
+    private void duplicateTel(String tel) {
+        Optional<Long> existTel = memberRepository.existTel(tel);
+        if (existTel.isPresent()) {
             throw new DuplicateException();
         }
+    }
 
-        Optional<Long> email = memberRepository.existEmail(dto.getEmail());
-        if (email.isPresent()) {
+    private void duplicateEmail(String email) {
+        Optional<Long> existEmail = memberRepository.existEmail(email);
+        if (existEmail.isPresent()) {
             throw new DuplicateException();
         }
+    }
 
-        Optional<Long> nickname = memberRepository.existNickname(dto.getNickname());
-        if (nickname.isPresent()) {
+    private void duplicateNickname(String nickname) {
+        Optional<Long> existNickname = memberRepository.existNickname(nickname);
+        if (existNickname.isPresent()) {
             throw new DuplicateException();
         }
+    }
 
-        Member member = Member.builder()
+    private Member createMember(SignupMemberDto dto) {
+        return Member.builder()
                 .loginId(dto.getLoginId())
                 .loginPw(dto.getLoginPw())
                 .name(dto.getName())
@@ -54,8 +74,5 @@ public class MemberServiceImpl implements MemberService {
                 .active(ACTIVE)
                 .roles(Collections.singletonList("MEMBER"))
                 .build();
-
-        Member savedMember = memberRepository.save(member);
-        return savedMember.getId();
     }
 }
