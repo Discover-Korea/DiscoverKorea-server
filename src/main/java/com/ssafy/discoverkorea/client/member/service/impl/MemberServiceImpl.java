@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
                 .birth(dto.getBirth())
                 .gender(dto.getGender())
                 .nickname(dto.getNickname())
-                .uploadFile(dto.getUploadFile())
+                .uploadFile(null)
                 .active(ACTIVE)
                 .roles(Collections.singletonList("MEMBER"))
                 .build();

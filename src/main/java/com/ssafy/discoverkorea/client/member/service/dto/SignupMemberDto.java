@@ -1,12 +1,11 @@
 package com.ssafy.discoverkorea.client.member.service.dto;
 
 import com.ssafy.discoverkorea.client.member.Gender;
-import com.ssafy.discoverkorea.common.entity.UploadFile;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 @Data
 @NoArgsConstructor(access = PROTECTED)
@@ -20,10 +19,9 @@ public class SignupMemberDto {
     private String birth;
     private Gender gender;
     private String nickname;
-    private UploadFile uploadFile;
 
     @Builder
-    public SignupMemberDto(String loginId, String loginPw, String name, String tel, String email, String birth, Gender gender, String nickname, UploadFile uploadFile) {
+    public SignupMemberDto(String loginId, String loginPw, String name, String tel, String email, String birth, Gender gender, String nickname) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;
@@ -32,6 +30,5 @@ public class SignupMemberDto {
         this.birth = birth;
         this.gender = gender;
         this.nickname = nickname;
-        this.uploadFile = uploadFile;
     }
 }
