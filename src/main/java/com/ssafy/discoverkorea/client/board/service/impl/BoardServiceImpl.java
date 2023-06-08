@@ -4,6 +4,7 @@ import com.ssafy.discoverkorea.client.board.Board;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
+import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,15 @@ public class BoardServiceImpl implements BoardService {
 
         Board savedBoard = boardRepository.save(board);
         return savedBoard.getId();
+    }
+
+    @Override
+    public Long editBoard(Long boardId, EditBoardDto dto) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.editBoard(dto.getTitle(), dto.getContent());
+        return findBoard.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {

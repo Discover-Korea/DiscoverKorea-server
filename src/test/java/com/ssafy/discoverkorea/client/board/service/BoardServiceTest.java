@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.client.board.service;
 import com.ssafy.discoverkorea.client.board.Board;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
+import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -46,6 +47,26 @@ class BoardServiceTest {
         assertThat(findBoard).isPresent();
     }
 
+    @Test
+    @DisplayName("게시글 수정")
+    void editBoard() {
+        //given
+        Board board = insertBoard();
+        EditBoardDto dto = EditBoardDto.builder()
+                .title("edit board title")
+                .content("edit board content")
+                .build();
+
+        //when
+        Long boardId = boardService.editBoard(board.getId(), dto);
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getTitle()).isEqualTo(dto.getTitle());
+        assertThat(findBoard.get().getContent()).isEqualTo(dto.getContent());
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -59,5 +80,14 @@ class BoardServiceTest {
                 .active(ACTIVE)
                 .build();
         return memberRepository.save(member);
+    }
+
+    private Board insertBoard() {
+        Board board = Board.builder()
+                .title("board title")
+                .content("board content")
+                .active(ACTIVE)
+                .build();
+        return boardRepository.save(board);
     }
 }
