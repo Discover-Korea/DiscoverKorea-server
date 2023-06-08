@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.client.member.service.impl;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
+import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
@@ -59,6 +60,11 @@ public class MemberServiceImpl implements MemberService {
 
         findMember.editTel(newTel);
         return findMember.getId();
+    }
+
+    @Override
+    public Long editEmail(String loginId, EditEmailDto dto) {
+        return null;
     }
 
     private void duplicateLoginId(String loginId) {
