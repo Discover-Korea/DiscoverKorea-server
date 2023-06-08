@@ -91,4 +91,20 @@ class MemberTest {
         //then
         assertThat(member.getEmail()).isEqualTo(newEmail);
     }
+
+    @Test
+    @DisplayName("닉네임 변경")
+    void editNickname() {
+        //given
+        Member member = Member.builder()
+                .nickname("동팔이")
+                .build();
+        String newNickname = "두칠이";
+
+        //when
+        member.editNickname(newNickname);
+
+        //then
+        assertThat(member.getNickname()).isEqualTo(newNickname);
+    }
 }
