@@ -29,4 +29,9 @@ public class AccountServiceImpl implements AccountService {
         //인증 정보를 기반은 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
     }
+
+    @Override
+    public String forgotLoginId(String name, String tel) {
+        return null;
+    }
 }

@@ -7,4 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AccountService {
 
     TokenInfo login(String loginId, String loginPw);
+
+    String forgotLoginId(String name, String tel);
 }
