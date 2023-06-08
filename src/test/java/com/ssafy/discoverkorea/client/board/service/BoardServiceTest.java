@@ -95,7 +95,7 @@ class BoardServiceTest {
         //then
         Optional<Board> findBoard = boardRepository.findById(boardId);
         assertThat(findBoard).isPresent();
-        assertThat(findBoard.get().getHitCount()).isEqualTo(board.getHitCount() + 1);
+        assertThat(findBoard.get().getHitCount()).isEqualTo(1);
     }
 
     private Member insertMember() {
