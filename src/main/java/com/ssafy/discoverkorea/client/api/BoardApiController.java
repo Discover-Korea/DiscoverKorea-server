@@ -2,6 +2,9 @@ package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.board.AddBoardRequest;
 import com.ssafy.discoverkorea.client.api.request.board.EditBoardRequest;
+import com.ssafy.discoverkorea.client.api.response.board.BoardResponse;
+import com.ssafy.discoverkorea.client.board.repository.dto.SearchBoardCondition;
+import com.ssafy.discoverkorea.client.board.service.BoardQueryService;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
@@ -10,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +27,7 @@ import javax.validation.Valid;
 public class BoardApiController {
 
     private final BoardService boardService;
+    private final BoardQueryService boardQueryService;
 
     @ApiOperation(value = "게시글 등록")
     @PostMapping("/add")
@@ -56,5 +62,21 @@ public class BoardApiController {
     public void removeBoard(@PathVariable Long boardId) {
         Long removeBoardId = boardService.removeBoard(boardId);
         log.debug("removeBoard={}", removeBoardId);
+    }
+
+    @ApiOperation(value = "게시글 목록 조회")
+    @GetMapping
+    public Page<BoardResponse> searchByCondition(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "1") Integer page
+    ) {
+        log.debug("keyword={}, page={}", keyword, page);
+        SearchBoardCondition condition = SearchBoardCondition.builder()
+                .keyword(keyword)
+                .build();
+        PageRequest pageRequest = PageRequest.of(page - 1, 20);
+        Page<BoardResponse> responses = boardQueryService.searchByCondition(condition, pageRequest);
+        log.debug("BoardResponse size={}", responses.getContent().size());
+        return responses;
     }
 }
