@@ -1,5 +1,6 @@
 package com.ssafy.discoverkorea.client.board.service.impl;
 
+import com.ssafy.discoverkorea.client.api.response.board.BoardDetailResponse;
 import com.ssafy.discoverkorea.client.api.response.board.BoardResponse;
 import com.ssafy.discoverkorea.client.board.repository.BoardQueryRepository;
 import com.ssafy.discoverkorea.client.board.repository.dto.SearchBoardCondition;
@@ -23,5 +24,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
         List<BoardResponse> responses = boardQueryRepository.searchByCondition(condition, pageable);
         long totalCount = boardQueryRepository.totalCountByCondition(condition);
         return new PageImpl<>(responses, pageable, totalCount);
+    }
+
+    @Override
+    public BoardDetailResponse getBoard(Long boardId) {
+        return boardQueryRepository.getBoard(boardId);
     }
 }

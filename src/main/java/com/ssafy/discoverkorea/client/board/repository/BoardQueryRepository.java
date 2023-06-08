@@ -2,7 +2,9 @@ package com.ssafy.discoverkorea.client.board.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.discoverkorea.client.api.response.board.BoardDetailResponse;
 import com.ssafy.discoverkorea.client.api.response.board.BoardResponse;
 import com.ssafy.discoverkorea.client.board.repository.dto.SearchBoardCondition;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +74,24 @@ public class BoardQueryRepository {
                 )
                 .fetch()
                 .size();
+    }
+
+    public BoardDetailResponse getBoard(Long boardId) {
+        return queryFactory
+                .select(Projections.constructor(BoardDetailResponse.class,
+                        Expressions.asNumber(boardId),
+                        board.title,
+                        board.content,
+                        board.hitCount,
+                        board.likeCount,
+                        board.scrapCount,
+                        board.commentCount,
+                        board.createdDate,
+                        board.member.nickname))
+                .from(board)
+                .join(board.member, member)
+                .where(board.id.eq(boardId))
+                .fetchOne();
     }
 
     private BooleanExpression isKeyword(String keyword) {
