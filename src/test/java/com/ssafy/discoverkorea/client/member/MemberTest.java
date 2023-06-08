@@ -1,9 +1,11 @@
 package com.ssafy.discoverkorea.client.member;
 
+import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
     
@@ -20,8 +22,8 @@ class MemberTest {
         String newLoginPw = member.getLoginPw() + "@";
             
         //then
-        assertThatThrownBy(() -> {member.editLoginPw(nowLoginPw, newLoginPw)})
-                .isInstanceOf();
+        assertThatThrownBy(() -> member.editLoginPw(nowLoginPw, newLoginPw))
+                .isInstanceOf(EditException.class);
     }
 
     @Test
@@ -37,8 +39,8 @@ class MemberTest {
         String newLoginPw = member.getLoginPw();
 
         //then
-        assertThatThrownBy(() -> {member.editLoginPw(nowLoginPw, newLoginPw)})
-                .isInstanceOf();
+        assertThatThrownBy(() -> member.editLoginPw(nowLoginPw, newLoginPw))
+                .isInstanceOf(EditException.class);
     }
 
     @Test
@@ -52,6 +54,7 @@ class MemberTest {
         //when
         String nowLoginPw = member.getLoginPw();
         String newLoginPw = member.getLoginPw() + "!";
+        member.editLoginPw(nowLoginPw, newLoginPw);
 
         //then
         assertThat(member.getLoginPw()).isEqualTo(newLoginPw);
