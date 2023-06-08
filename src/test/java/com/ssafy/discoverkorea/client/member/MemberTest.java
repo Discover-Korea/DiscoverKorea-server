@@ -143,7 +143,7 @@ class MemberTest {
 
         //then
         assertThatThrownBy(() -> member.withdrawal(errorLoginPw))
-                .isEqualTo(EditException.class);
+                .isInstanceOf(EditException.class);
     }
 
     @Test
