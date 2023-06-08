@@ -64,7 +64,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long editEmail(String loginId, EditEmailDto dto) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> memberId = memberRepository.existEmail(dto.getNewEmail());
+        if (memberId.isPresent()) {
+            if (findMember.getId().equals(memberId.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        findMember.editEmail(dto.getNewEmail());
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {
