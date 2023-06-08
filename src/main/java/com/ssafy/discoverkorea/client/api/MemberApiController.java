@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.member.EditEmailRequest;
 import com.ssafy.discoverkorea.client.api.request.member.EditLoginPwRequest;
+import com.ssafy.discoverkorea.client.api.request.member.EditNicknameRequest;
 import com.ssafy.discoverkorea.client.api.request.member.EditTelRequest;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
@@ -65,5 +66,16 @@ public class MemberApiController {
                 .build();
         Long memberId = memberService.editEmail(loginId, dto);
         log.debug("editEmail member={}", memberId);
+    }
+
+    @ApiOperation(value = "닉네임 변경")
+    @PutMapping("/nickname")
+    public void editNickname(@Valid @RequestBody EditNicknameRequest request) {
+        log.debug("EditNicknameRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long memberId = memberService.editNickname(loginId, request.getNewNickname());
+        log.debug("editNickname member={}", memberId);
     }
 }
