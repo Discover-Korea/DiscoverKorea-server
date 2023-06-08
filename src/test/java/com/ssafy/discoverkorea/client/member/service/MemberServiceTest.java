@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.client.member.service;
 
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
+import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
@@ -187,6 +188,70 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getTel()).isEqualTo(newTel);
+    }
+
+    @Test
+    @DisplayName("이메일 변경#기존 이메일과 일치")
+    void equalBeforeEmail() {
+        //given
+        Member member = insertMember();
+
+        //when
+        EditEmailDto dto = EditEmailDto.builder()
+                .nowEmail(member.getEmail())
+                .newEmail(member.getEmail())
+                .build();
+
+        //then
+        assertThatThrownBy(() -> memberService.editEmail(member.getLoginId(), dto))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("이메일 변경#이메일 중복")
+    void duplicationNewEmail() {
+        //given
+        Member targetMember = memberRepository.save(Member.builder()
+                .loginId("ssafy1")
+                .loginPw("ssafy1234!")
+                .name("김싸피")
+                .tel("010-5678-5678")
+                .email("ssafy1@ssafy.com")
+                .birth("1998")
+                .gender(MALE)
+                .nickname("react")
+                .active(ACTIVE)
+                .build());
+        Member member = insertMember();
+
+        //when
+        EditEmailDto dto = EditEmailDto.builder()
+                .nowEmail(member.getEmail())
+                .newEmail(targetMember.getEmail())
+                .build();
+
+        //then
+        assertThatThrownBy(() -> memberService.editEmail(member.getLoginId(), dto))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("이메일 변경")
+    void editEmail() {
+        //given
+        Member member = insertMember();
+        String newEmail = member.getEmail().replace("ssafy@", "ssafy1@");
+        EditEmailDto dto = EditEmailDto.builder()
+                .nowEmail(member.getEmail())
+                .newEmail(newEmail)
+                .build();
+        //when
+        Long memberId = memberService.editEmail(member.getLoginId(), dto);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getEmail()).isEqualTo(newEmail);
     }
 
     private Member insertMember() {
