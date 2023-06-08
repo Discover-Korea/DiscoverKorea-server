@@ -22,4 +22,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Long> existNickname(@Param("nickname") String nickname);
 
     Optional<Member> findByLoginId(@Param("loginId") String loginId);
+
+    @Query("select m.loginId from Member m where m.name=:name and m.tel=:tel")
+    Optional<String> findByNameAndTel(@Param("name") String name, @Param("tel") String tel);
 }
