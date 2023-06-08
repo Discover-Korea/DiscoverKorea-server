@@ -6,8 +6,11 @@ import com.ssafy.discoverkorea.client.board.repository.dto.SearchBoardCondition;
 import com.ssafy.discoverkorea.client.board.service.BoardQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
 
     @Override
     public Page<BoardResponse> searchByCondition(SearchBoardCondition condition, Pageable pageable) {
-        return null;
+        List<BoardResponse> responses = boardQueryRepository.searchByCondition(condition, pageable);
+        long totalCount = boardQueryRepository.totalCountByCondition(condition);
+        return new PageImpl<>(responses, pageable, totalCount);
     }
 }
