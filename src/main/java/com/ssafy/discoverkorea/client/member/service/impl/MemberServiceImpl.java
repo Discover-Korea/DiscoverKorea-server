@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
@@ -35,7 +36,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long editLoginPw(String loginId, EditLoginPwDto dto) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findMember.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {

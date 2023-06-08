@@ -7,11 +7,11 @@ import lombok.Data;
 public class EditLoginPwDto {
 
     private String nowLoginPw;
-    private String newLoginPW;
+    private String newLoginPw;
 
     @Builder
-    public EditLoginPwDto(String nowLoginPw, String newLoginPW) {
+    public EditLoginPwDto(String nowLoginPw, String newLoginPw) {
         this.nowLoginPw = nowLoginPw;
-        this.newLoginPW = newLoginPW;
+        this.newLoginPw = newLoginPw;
     }
 }
