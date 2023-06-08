@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/my")
+@RequestMapping("/api/my")
 @Api(tags = {"마이페이지"})
 public class MemberApiController {
 
