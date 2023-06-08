@@ -5,6 +5,8 @@ import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -125,5 +127,38 @@ class MemberTest {
 
         //then
         assertThat(member.getUploadFile()).isEqualTo(newProfile);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴#비밀번호 불일치")
+    void notEqualLoginPw() {
+        //given
+        Member member = Member.builder()
+                .loginPw("ssafy1234!")
+                .active(ACTIVE)
+                .build();
+
+        //when
+        String errorLoginPw = member.getLoginPw() + "@";
+
+        //then
+        assertThatThrownBy(() -> member.withdrawal(errorLoginPw))
+                .isEqualTo(EditException.class);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴")
+    void withdrawal() {
+        //given
+        Member member = Member.builder()
+                .loginPw("ssafy1234!")
+                .active(ACTIVE)
+                .build();
+
+        //when
+        member.withdrawal(member.getLoginPw());
+
+        //then
+        assertThat(member.getActive()).isEqualTo(DEACTIVE);
     }
 }
