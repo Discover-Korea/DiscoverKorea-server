@@ -1,5 +1,6 @@
 package com.ssafy.discoverkorea.client.member;
 
+import com.ssafy.discoverkorea.common.entity.UploadFile;
 import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -106,5 +107,23 @@ class MemberTest {
 
         //then
         assertThat(member.getNickname()).isEqualTo(newNickname);
+    }
+
+    @Test
+    @DisplayName("프로필 이미지 변경")
+    void editProfile() {
+        //given
+        Member member = Member.builder()
+                .uploadFile(null)
+                .build();
+        UploadFile newProfile = UploadFile.builder()
+                .storeFileName("store_file_name.jpg")
+                .uploadFileName("upload_file_name.jpg")
+                .build();
+        //when
+        member.editProfile(newProfile);
+
+        //then
+        assertThat(member.getUploadFile()).isEqualTo(newProfile);
     }
 }
