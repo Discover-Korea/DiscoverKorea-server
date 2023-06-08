@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 import static com.ssafy.discoverkorea.client.member.Gender.MALE;
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
@@ -65,6 +66,49 @@ class AccountServiceTest {
 
         //then
         assertThat(tokenInfo).isNotNull();
+    }
+
+    @Test
+    @DisplayName("아이디 찾기#존재하지 않는 이름")
+    void notExistName() {
+        //given
+        Member member = insertMember();
+
+        //when
+        String name = member.getName() + "님";
+        String tel = member.getTel();
+
+        //then
+        assertThatThrownBy(() -> accountService.forgotLoginId(name, tel))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("아이디 찾기#존재하지 않는 연락처")
+    void notExistTel() {
+        //given
+        Member member = insertMember();
+
+        //when
+        String name = member.getName();
+        String tel = member.getTel().replace("1234", "5678");
+
+        //then
+        assertThatThrownBy(() -> accountService.forgotLoginId(name, tel))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("아이디 찾기")
+    void forgotLoginId() {
+        //given
+        Member member = insertMember();
+
+        //when
+        String loginId = accountService.forgotLoginId(member.getName(), member.getTel());
+
+        //then
+        assertThat(loginId).isEqualTo(member.getLoginId());
     }
 
     private Member insertMember() {

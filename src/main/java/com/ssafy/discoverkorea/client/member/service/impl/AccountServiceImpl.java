@@ -1,5 +1,6 @@
 package com.ssafy.discoverkorea.client.member.service.impl;
 
+import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.AccountService;
 import com.ssafy.discoverkorea.jwt.JwtTokenProvider;
 import com.ssafy.discoverkorea.jwt.TokenInfo;
@@ -9,12 +10,16 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberRepository memberRepository;
 
     @Override
     public TokenInfo login(String loginId, String loginPw) {
@@ -28,5 +33,23 @@ public class AccountServiceImpl implements AccountService {
 
         //인증 정보를 기반은 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
+    }
+
+    @Override
+    public String forgotLoginId(String name, String tel) {
+        Optional<String> loginId = memberRepository.findByNameAndTel(name, tel);
+        if (!loginId.isPresent()) {
+            throw new NoSuchElementException();
+        }
+        return loginId.get();
+    }
+
+    @Override
+    public String forgotLoginPw(String loginId, String name, String tel) {
+        Optional<String> loginPw = memberRepository.forgotLoginPw(loginId, name, tel);
+        if (!loginPw.isPresent()) {
+            throw new NoSuchElementException();
+        }
+        return loginPw.get();
     }
 }
