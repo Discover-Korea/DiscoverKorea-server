@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static com.ssafy.discoverkorea.client.member.Gender.MALE;
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -65,6 +66,21 @@ class BoardServiceTest {
         assertThat(findBoard).isPresent();
         assertThat(findBoard.get().getTitle()).isEqualTo(dto.getTitle());
         assertThat(findBoard.get().getContent()).isEqualTo(dto.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void removeBoard() {
+        //given
+        Board board = insertBoard();
+
+        //when
+        Long boardId = boardService.removeBoard(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private Member insertMember() {
