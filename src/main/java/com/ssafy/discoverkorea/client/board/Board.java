@@ -65,4 +65,8 @@ public class Board extends TimeBaseEntity {
     public void removeBoard() {
         this.active = DEACTIVE;
     }
+
+    public void increaseHitCount() {
+        this.hitCount += 1;
+    }
 }

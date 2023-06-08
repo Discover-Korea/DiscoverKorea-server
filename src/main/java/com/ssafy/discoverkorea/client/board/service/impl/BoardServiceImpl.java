@@ -50,6 +50,15 @@ public class BoardServiceImpl implements BoardService {
         return findBoard.getId();
     }
 
+    @Override
+    public Long increaseHitCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.increaseHitCount();
+        return findBoard.getId();
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)
