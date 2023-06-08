@@ -83,6 +83,21 @@ class BoardServiceTest {
         assertThat(findBoard.get().getActive()).isEqualTo(DEACTIVE);
     }
 
+    @Test
+    @DisplayName("게시글 조회수 증가")
+    void increaseHitCount() {
+        //given
+        Board board = insertBoard();
+
+        //when
+        Long boardId = boardService.increaseHitCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getHitCount()).isEqualTo(board.getHitCount() + 1);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
