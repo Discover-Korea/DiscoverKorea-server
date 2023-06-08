@@ -1,8 +1,10 @@
 package com.ssafy.discoverkorea.client.api;
 
+import com.ssafy.discoverkorea.client.api.request.member.EditEmailRequest;
 import com.ssafy.discoverkorea.client.api.request.member.EditLoginPwRequest;
 import com.ssafy.discoverkorea.client.api.request.member.EditTelRequest;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
+import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -48,6 +50,20 @@ public class MemberApiController {
         log.debug("loginId={}", loginId);
 
         Long memberId = memberService.editTel(loginId, request.getNewTel());
-        log.debug("editTel memnber={}", memberId);
+        log.debug("editTel member={}", memberId);
+    }
+
+    @ApiOperation(value = "이메일 변경")
+    @PutMapping("/email")
+    public void editEmail(@Valid @RequestBody EditEmailRequest request) {
+        log.debug("EditEmailRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        EditEmailDto dto = EditEmailDto.builder()
+                .newEmail(request.getNewEmail())
+                .build();
+        Long memberId = memberService.editEmail(loginId, dto);
+        log.debug("editEmail member={}", memberId);
     }
 }
