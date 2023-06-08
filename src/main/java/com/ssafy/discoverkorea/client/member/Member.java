@@ -92,6 +92,10 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.email = newEmail;
     }
 
+    public void editNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
+
     //== 시큐리티 설정 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
