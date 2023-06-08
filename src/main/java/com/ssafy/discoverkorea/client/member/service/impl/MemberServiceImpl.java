@@ -3,12 +3,17 @@ package com.ssafy.discoverkorea.client.member.service.impl;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
+import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
+import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
+import com.ssafy.discoverkorea.common.entity.UploadFile;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
@@ -30,6 +35,75 @@ public class MemberServiceImpl implements MemberService {
 
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
+    }
+
+    @Override
+    public Long editLoginPw(String loginId, EditLoginPwDto dto) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findMember.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
+        return findMember.getId();
+    }
+
+    @Override
+    public Long editTel(String loginId, String newTel) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> memberId = memberRepository.existTel(newTel);
+        if (memberId.isPresent()) {
+            if (findMember.getId().equals(memberId.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        findMember.editTel(newTel);
+        return findMember.getId();
+    }
+
+    @Override
+    public Long editEmail(String loginId, EditEmailDto dto) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> memberId = memberRepository.existEmail(dto.getNewEmail());
+        if (memberId.isPresent()) {
+            if (findMember.getId().equals(memberId.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        findMember.editEmail(dto.getNewEmail());
+        return findMember.getId();
+    }
+
+    @Override
+    public Long editNickname(String loginId, String newNickname) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> memberId = memberRepository.existNickname(newNickname);
+        if (memberId.isPresent()) {
+            if (findMember.getId().equals(memberId.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        findMember.editNickname(newNickname);
+        return findMember.getId();
+    }
+
+    @Override
+    public Long editProfile(String loginId, UploadFile uploadFile) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findMember.editProfile(uploadFile);
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {

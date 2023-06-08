@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.client.member;
 import com.ssafy.discoverkorea.common.entity.Active;
 import com.ssafy.discoverkorea.common.entity.TimeBaseEntity;
 import com.ssafy.discoverkorea.common.entity.UploadFile;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -70,6 +71,33 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.uploadFile = uploadFile;
         this.active = active;
         this.roles = roles;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void editLoginPw(String nowLoginPw, String newLoginPw) {
+        if (!this.loginPw.equals(nowLoginPw)) {
+            throw new EditException();
+        }
+        if (this.loginPw.equals(newLoginPw)) {
+            throw new EditException();
+        }
+        this.loginPw = newLoginPw;
+    }
+
+    public void editTel(String newTel) {
+        this.tel = newTel;
+    }
+
+    public void editEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
+    public void editNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
+
+    public void editProfile(UploadFile uploadFile) {
+        this.uploadFile = uploadFile;
     }
 
     //== 시큐리티 설정 ==//
