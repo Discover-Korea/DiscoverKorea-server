@@ -5,6 +5,7 @@ import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
+import com.ssafy.discoverkorea.common.entity.UploadFile;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
@@ -305,6 +306,25 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getNickname()).isEqualTo(newNickname);
+    }
+
+    @Test
+    @DisplayName("프로필 이미지 변경")
+    void editProfile() {
+        //given
+        Member member = insertMember();
+        UploadFile newProfile = UploadFile.builder()
+                .storeFileName("store_file_name.jpg")
+                .uploadFileName("upload_file_name.jpg")
+                .build();
+
+        //when
+        Long memberId = memberService.editProfile(member.getLoginId(), newProfile);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getUploadFile()).isEqualTo(newProfile);
     }
 
     private Member insertMember() {
