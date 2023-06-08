@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static com.ssafy.discoverkorea.client.member.Gender.MALE;
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -325,6 +326,21 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getUploadFile()).isEqualTo(newProfile);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴")
+    void withdrawal() {
+        //given
+        Member member = insertMember();
+
+        //when
+        Long memberId = memberService.withdrawal(member.getLoginId(), member.getLoginPw());
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private Member insertMember() {

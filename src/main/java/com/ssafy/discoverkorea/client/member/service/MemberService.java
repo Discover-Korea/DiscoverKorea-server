@@ -20,4 +20,6 @@ public interface MemberService {
     Long editNickname(String loginId, String newNickname);
 
     Long editProfile(String loginId, UploadFile uploadFile);
+
+    Long withdrawal(String loginId, String loginPw);
 }

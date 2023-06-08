@@ -106,6 +106,15 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long withdrawal(String loginId, String loginPw) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findMember.withdrawal(loginPw);
+        return findMember.getId();
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Long> existLoginId = memberRepository.existLoginId(loginId);
         if (existLoginId.isPresent()) {

@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ssafy.discoverkorea.common.entity.Active.*;
 import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
 
@@ -98,6 +99,13 @@ public class Member extends TimeBaseEntity implements UserDetails {
 
     public void editProfile(UploadFile uploadFile) {
         this.uploadFile = uploadFile;
+    }
+
+    public void withdrawal(String loginPw) {
+        if (!this.loginPw.equals(loginPw)) {
+            throw new EditException();
+        }
+        this.active = DEACTIVE;
     }
 
     //== 시큐리티 설정 ==//
