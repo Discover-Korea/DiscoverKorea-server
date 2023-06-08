@@ -36,7 +36,7 @@ public class BoardApiController {
                 .build();
         Long boardId = boardService.addBoard(loginId, dto);
         log.debug("addBoard={}", boardId);
-    }러
+    }
 
     @ApiOperation(value = "게시글 수정")
     @PutMapping("/{boardId}")
