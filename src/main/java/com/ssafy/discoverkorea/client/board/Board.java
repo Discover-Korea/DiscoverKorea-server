@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static com.ssafy.discoverkorea.common.entity.Active.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -59,5 +60,9 @@ public class Board extends TimeBaseEntity {
     public void editBoard(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void removeBoard() {
+        this.active = DEACTIVE;
     }
 }
