@@ -34,7 +34,11 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long editBoard(Long boardId, EditBoardDto dto) {
-        return null;
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.editBoard(dto.getTitle(), dto.getContent());
+        return findBoard.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
