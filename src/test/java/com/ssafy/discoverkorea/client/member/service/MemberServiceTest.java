@@ -5,6 +5,7 @@ import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,59 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getLoginPw()).isEqualTo(newLoginPw);
+    }
+
+    @Test
+    @DisplayName("연락처 변경#기존 연락처와 일치")
+    void equalBeforeTel() {
+        //given
+        Member member = insertMember();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> memberService.editTel(member.getLoginId(), member.getTel()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("연락처 변경#연락처 중복")
+    void duplicationNewTel() {
+        //given
+        Member targetMember = memberRepository.save(Member.builder()
+                .loginId("ssafy1")
+                .loginPw("ssafy1234!")
+                .name("김싸피")
+                .tel("010-5678-5678")
+                .email("ssafy1@ssafy.com")
+                .birth("1998")
+                .gender(MALE)
+                .nickname("react")
+                .active(ACTIVE)
+                .build());
+        Member member = insertMember();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> memberService.editTel(member.getLoginId(), targetMember.getTel()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("연락처 변경")
+    void editTel() {
+        //given
+        Member member = insertMember();
+        String newTel = member.getTel().replace("1234", "5678");
+
+        //when
+        Long memberId = memberService.editTel(member.getLoginId(), newTel);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getTel()).isEqualTo(newTel);
     }
 
     private Member insertMember() {
