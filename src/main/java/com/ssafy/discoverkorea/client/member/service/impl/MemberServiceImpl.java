@@ -6,6 +6,7 @@ import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
+import com.ssafy.discoverkorea.common.entity.UploadFile;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import com.ssafy.discoverkorea.common.exception.EditException;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,11 @@ public class MemberServiceImpl implements MemberService {
 
         findMember.editNickname(newNickname);
         return findMember.getId();
+    }
+
+    @Override
+    public Long editProfile(String loginId, UploadFile uploadFile) {
+        return null;
     }
 
     private void duplicateLoginId(String loginId) {
