@@ -54,4 +54,10 @@ public class Board extends TimeBaseEntity {
         this.active = active;
         this.member = member;
     }
+
+    //== 비즈니스 로직 ==//
+    public void editBoard(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
