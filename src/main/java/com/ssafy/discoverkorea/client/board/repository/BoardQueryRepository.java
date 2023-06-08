@@ -62,6 +62,18 @@ public class BoardQueryRepository {
                 .fetch();
     }
 
+    public long totalCountByCondition(SearchBoardCondition condition) {
+        return queryFactory
+                .select(board.id)
+                .from(board)
+                .where(
+                        board.active.eq(ACTIVE),
+                        isKeyword(condition.getKeyword())
+                )
+                .fetch()
+                .size();
+    }
+
     private BooleanExpression isKeyword(String keyword) {
         String likeCond = "%" + keyword + "%";
         return hasText(keyword) ? board.title.like(likeCond).or(board.content.eq(likeCond)) : null;
