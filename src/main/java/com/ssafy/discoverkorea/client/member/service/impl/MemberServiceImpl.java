@@ -79,6 +79,11 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long editNickname(String loginId, String newNickname) {
+        return null;
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Long> existLoginId = memberRepository.existLoginId(loginId);
         if (existLoginId.isPresent()) {
