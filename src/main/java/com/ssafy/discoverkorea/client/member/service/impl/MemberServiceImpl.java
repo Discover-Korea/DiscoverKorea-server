@@ -6,6 +6,7 @@ import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long editTel(String loginId, String newTel) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> memberId = memberRepository.existTel(newTel);
+        if (memberId.isPresent()) {
+            if (findMember.getId().equals(memberId.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        findMember.editTel(newTel);
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {
