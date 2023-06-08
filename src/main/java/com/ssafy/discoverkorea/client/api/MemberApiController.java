@@ -1,12 +1,11 @@
 package com.ssafy.discoverkorea.client.api;
 
-import com.ssafy.discoverkorea.client.api.request.member.EditEmailRequest;
-import com.ssafy.discoverkorea.client.api.request.member.EditLoginPwRequest;
-import com.ssafy.discoverkorea.client.api.request.member.EditNicknameRequest;
-import com.ssafy.discoverkorea.client.api.request.member.EditTelRequest;
+import com.ssafy.discoverkorea.client.api.request.member.*;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
+import com.ssafy.discoverkorea.common.FileStore;
+import com.ssafy.discoverkorea.common.entity.UploadFile;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -27,6 +27,7 @@ import javax.validation.Valid;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final FileStore fileStore;
 
     @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/loginPw")
@@ -76,6 +77,19 @@ public class MemberApiController {
         log.debug("loginId={}", loginId);
 
         Long memberId = memberService.editNickname(loginId, request.getNewNickname());
+        log.debug("editNickname member={}", memberId);
+    }
+
+    @ApiOperation(value = "프로필 이미지 변경")
+    @PutMapping("/profile")
+    public void editProfile(EditProfileRequest request) throws IOException {
+        log.debug("EditProfileRequest={}", request);
+        UploadFile uploadFile = fileStore.storeFile(request.getFile());
+        log.debug("UploadFile={}", uploadFile);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long memberId = memberService.editProfile(loginId, uploadFile);
         log.debug("editNickname member={}", memberId);
     }
 }
