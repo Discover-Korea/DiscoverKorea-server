@@ -254,6 +254,59 @@ class MemberServiceTest {
         assertThat(findMember.get().getEmail()).isEqualTo(newEmail);
     }
 
+    @Test
+    @DisplayName("닉네임 변경#기존 닉네임과 일치")
+    void equalBeforeNickname() {
+        //given
+        Member member = insertMember();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> memberService.editNickname(member.getLoginId(), member.getNickname()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("닉네임 변경#닉네임 중복")
+    void duplicationNewNickname() {
+        //given
+        Member targetMember = memberRepository.save(Member.builder()
+                .loginId("ssafy1")
+                .loginPw("ssafy1234!")
+                .name("김싸피")
+                .tel("010-5678-5678")
+                .email("ssafy1@ssafy.com")
+                .birth("1998")
+                .gender(MALE)
+                .nickname("react")
+                .active(ACTIVE)
+                .build());
+        Member member = insertMember();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> memberService.editNickname(member.getLoginId(), targetMember.getNickname()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("닉네임 변경")
+    void editNickname() {
+        //given
+        Member member = insertMember();
+        String newNickname = "동팔이";
+
+        //when
+        Long memberId = memberService.editNickname(member.getLoginId(), newNickname);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getNickname()).isEqualTo(newNickname);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
