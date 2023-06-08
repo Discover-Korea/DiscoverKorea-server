@@ -1,8 +1,11 @@
 package com.ssafy.discoverkorea.client.api;
 
+import com.ssafy.discoverkorea.client.api.request.member.LoginMemberRequest;
 import com.ssafy.discoverkorea.client.api.request.member.SignupMemberRequest;
+import com.ssafy.discoverkorea.client.member.service.AccountService;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
+import com.ssafy.discoverkorea.jwt.TokenInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import javax.validation.Valid;
 public class AccountApiController {
 
     private final MemberService memberService;
+    private final AccountService accountService;
 
     @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
@@ -29,6 +33,16 @@ public class AccountApiController {
 
         Long memberId = memberService.signup(dto);
         log.debug("signup member={}", memberId);
+    }
+
+    @ApiOperation(value = "로그인")
+    @PostMapping("/login")
+    public TokenInfo login(@Valid @RequestBody LoginMemberRequest request) {
+        log.debug("LoginMemberRequest={}", request);
+        TokenInfo tokenInfo = accountService.login(request.getLoginId(), request.getLoginPw());
+
+        log.debug("TokenInfo={}", tokenInfo);
+        return tokenInfo;
     }
 
     private SignupMemberDto toSignupMemberDto(SignupMemberRequest request) {
