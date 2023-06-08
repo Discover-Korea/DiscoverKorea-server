@@ -1,10 +1,11 @@
 package com.ssafy.discoverkorea.client.board;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class BoardTest {
 
@@ -25,5 +26,20 @@ class BoardTest {
         //then
         assertThat(board.getTitle()).isEqualTo(editTitle);
         assertThat(board.getContent()).isEqualTo(editContent);
+    }
+
+    @Test
+    @DisplayName("게시물 삭제")
+    void removeBoard() {
+        //given
+        Board board = Board.builder()
+                .active(ACTIVE)
+                .build();
+
+        //when
+        board.removeBoard();
+
+        //then
+        assertThat(board.getActive()).isEqualTo(DEACTIVE);
     }
 }
