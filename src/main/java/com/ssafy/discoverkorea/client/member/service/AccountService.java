@@ -9,4 +9,6 @@ public interface AccountService {
     TokenInfo login(String loginId, String loginPw);
 
     String forgotLoginId(String name, String tel);
+
+    String forgotLoginPw(String loginId, String name, String tel);
 }

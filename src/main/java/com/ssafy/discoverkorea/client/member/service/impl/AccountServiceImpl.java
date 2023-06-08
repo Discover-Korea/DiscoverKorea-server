@@ -43,4 +43,9 @@ public class AccountServiceImpl implements AccountService {
         }
         return loginId.get();
     }
+
+    @Override
+    public String forgotLoginPw(String loginId, String name, String tel) {
+        return null;
+    }
 }
