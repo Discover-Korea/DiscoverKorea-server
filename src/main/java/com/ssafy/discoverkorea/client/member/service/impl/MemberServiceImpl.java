@@ -99,7 +99,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long editProfile(String loginId, UploadFile uploadFile) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findMember.editProfile(uploadFile);
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {
