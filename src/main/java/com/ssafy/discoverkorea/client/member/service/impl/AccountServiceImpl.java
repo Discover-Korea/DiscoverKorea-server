@@ -46,6 +46,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String forgotLoginPw(String loginId, String name, String tel) {
-        return null;
+        Optional<String> loginPw = memberRepository.forgotLoginPw(loginId, name, tel);
+        if (!loginPw.isPresent()) {
+            throw new NoSuchElementException();
+        }
+        return loginPw.get();
     }
 }
