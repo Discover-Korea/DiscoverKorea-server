@@ -1,5 +1,6 @@
 package com.ssafy.discoverkorea.client.api;
 
+import com.ssafy.discoverkorea.client.api.request.member.ForgotLoginIdRequest;
 import com.ssafy.discoverkorea.client.api.request.member.LoginMemberRequest;
 import com.ssafy.discoverkorea.client.api.request.member.SignupMemberRequest;
 import com.ssafy.discoverkorea.client.api.request.member.WithdrawalMemberRequest;
@@ -49,7 +50,7 @@ public class AccountApiController {
         return tokenInfo;
     }
 
-    @ApiOperation("회원탈퇴")
+    @ApiOperation(value = "회원탈퇴")
     @PostMapping("/withdrawal")
     public void withdrawal(@Valid @RequestBody WithdrawalMemberRequest request) {
         log.debug("WithdrawalMemberRequest={}", request);
@@ -58,6 +59,15 @@ public class AccountApiController {
 
         Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
         log.debug("withdrawal member={}", memberId);
+    }
+
+    @ApiOperation(value = "아이디 찾기")
+    @PostMapping("/forgot/loginId")
+    public String forgotLoginId(@Valid @RequestBody ForgotLoginIdRequest request) {
+        log.debug("ForgotLoginIdRequest={}", request);
+        String loginId = accountService.forgotLoginId(request.getName(), request.getTel());
+        log.debug("forgotLoginId={}", loginId);
+        return loginId;
     }
 
     private SignupMemberDto toSignupMemberDto(SignupMemberRequest request) {
