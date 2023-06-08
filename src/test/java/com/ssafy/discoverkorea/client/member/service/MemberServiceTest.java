@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.client.member.service;
 
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
+import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import org.junit.jupiter.api.DisplayName;
@@ -111,6 +112,27 @@ class MemberServiceTest {
         //then
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경")
+    void editLoginPw() {
+        //given
+        Member member = insertMember();
+        String newLoginPw = member.getLoginPw() + "@";
+
+        EditLoginPwDto dto = EditLoginPwDto.builder()
+                .nowLoginPw(member.getLoginPw())
+                .newLoginPw(newLoginPw)
+                .build();
+
+        //when
+        Long memberId = memberService.editLoginPw(member.getLoginId(), dto);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getLoginPw()).isEqualTo(newLoginPw);
     }
 
     private Member insertMember() {
