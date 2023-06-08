@@ -85,6 +85,7 @@ public class BoardApiController {
     @GetMapping("/{boardId}")
     public BoardDetailResponse getBoard(@PathVariable Long boardId) {
         log.debug("boardId={}", boardId);
+        boardService.increaseHitCount(boardId);
         BoardDetailResponse response = boardQueryService.getBoard(boardId);
         log.debug("BoardDetailResponse={}", response);
         return response;
