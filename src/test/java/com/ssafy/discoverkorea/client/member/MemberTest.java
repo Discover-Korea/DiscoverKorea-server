@@ -60,7 +60,6 @@ class MemberTest {
         assertThat(member.getLoginPw()).isEqualTo(newLoginPw);
     }
 
-    //연락처 변경
     @Test
     @DisplayName("연락처 변경")
     void editTel() {
