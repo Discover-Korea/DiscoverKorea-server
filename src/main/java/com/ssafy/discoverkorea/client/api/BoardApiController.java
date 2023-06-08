@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.board.AddBoardRequest;
 import com.ssafy.discoverkorea.client.api.request.board.EditBoardRequest;
+import com.ssafy.discoverkorea.client.api.response.board.BoardDetailResponse;
 import com.ssafy.discoverkorea.client.api.response.board.BoardResponse;
 import com.ssafy.discoverkorea.client.board.repository.dto.SearchBoardCondition;
 import com.ssafy.discoverkorea.client.board.service.BoardQueryService;
@@ -78,5 +79,14 @@ public class BoardApiController {
         Page<BoardResponse> responses = boardQueryService.searchByCondition(condition, pageRequest);
         log.debug("BoardResponse size={}", responses.getContent().size());
         return responses;
+    }
+
+    @ApiOperation(value = "게시글 상세 조회")
+    @GetMapping("/{boardId}")
+    public BoardDetailResponse getBoard(@PathVariable Long boardId) {
+        log.debug("boardId={}", boardId);
+        BoardDetailResponse response = boardQueryService.getBoard(boardId);
+        log.debug("BoardDetailResponse={}", response);
+        return response;
     }
 }
