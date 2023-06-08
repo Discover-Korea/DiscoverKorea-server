@@ -43,6 +43,11 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long editTel(String loginId, String newTel) {
+        return null;
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Long> existLoginId = memberRepository.existLoginId(loginId);
         if (existLoginId.isPresent()) {

@@ -10,4 +10,6 @@ public interface MemberService {
     Long signup(SignupMemberDto dto);
 
     Long editLoginPw(String loginId, EditLoginPwDto dto);
+
+    Long editTel(String loginId, String newTel);
 }
