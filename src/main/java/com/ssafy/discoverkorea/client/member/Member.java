@@ -96,6 +96,10 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.nickname = newNickname;
     }
 
+    public void editProfile(UploadFile uploadFile) {
+        this.uploadFile = uploadFile;
+    }
+
     //== 시큐리티 설정 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
