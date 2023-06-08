@@ -1,17 +1,16 @@
 package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.board.AddBoardRequest;
+import com.ssafy.discoverkorea.client.api.request.board.EditBoardRequest;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
+import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -37,5 +36,18 @@ public class BoardApiController {
                 .build();
         Long boardId = boardService.addBoard(loginId, dto);
         log.debug("addBoard={}", boardId);
+    }러
+
+    @ApiOperation(value = "게시글 수정")
+    @PutMapping("/{boardId}")
+    public void editBoard(@PathVariable Long boardId, @Valid @RequestBody EditBoardRequest request) {
+        log.debug("EditBoardRequest={}", request);
+
+        EditBoardDto dto = EditBoardDto.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        Long editBoardId = boardService.editBoard(boardId, dto);
+        log.debug("editBoard={}", editBoardId);
     }
 }
