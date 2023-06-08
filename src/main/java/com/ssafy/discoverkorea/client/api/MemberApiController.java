@@ -1,6 +1,7 @@
 package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.member.EditLoginPwRequest;
+import com.ssafy.discoverkorea.client.api.request.member.EditTelRequest;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
@@ -37,5 +38,16 @@ public class MemberApiController {
                 .build();
         Long memberId = memberService.editLoginPw(loginId, dto);
         log.debug("editLoginPw member={}", memberId);
+    }
+
+    @ApiOperation(value = "연락처 변경")
+    @PutMapping("/tel")
+    public void editTel(@Valid @RequestBody EditTelRequest request) {
+        log.debug("EditTelRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long memberId = memberService.editTel(loginId, request.getNewTel());
+        log.debug("editTel memnber={}", memberId);
     }
 }
