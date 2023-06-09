@@ -87,7 +87,10 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long cancelBoardLike(String loginId, Long boardId) {
-        return null;
+        Long boardLikeId = boardLikeRepository.findByLoginIdAndBoardId(loginId, boardId)
+                .orElseThrow(NoSuchElementException::new);
+        boardLikeRepository.deleteById(boardLikeId);
+        return boardLikeId;
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
