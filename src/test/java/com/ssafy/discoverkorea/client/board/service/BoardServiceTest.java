@@ -1,6 +1,8 @@
 package com.ssafy.discoverkorea.client.board.service;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
@@ -29,6 +31,8 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private BoardLikeRepository boardLikeRepository;
 
     @Test
     @DisplayName("게시글 등록")
@@ -96,6 +100,21 @@ class BoardServiceTest {
         Optional<Board> findBoard = boardRepository.findById(boardId);
         assertThat(findBoard).isPresent();
         assertThat(findBoard.get().getHitCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 등록")
+    void addBoardLike() {
+        //given
+        Member member = insertMember();
+        Board board = insertBoard();
+
+        //when
+        Long boardLikeId = boardService.addBoardLike(member.getLoginId(), board.getId());
+
+        //then
+        Optional<BoardLike> findBoardLike = boardLikeRepository.findById(boardLikeId);
+        assertThat(findBoardLike).isPresent();
     }
 
     private Member insertMember() {
