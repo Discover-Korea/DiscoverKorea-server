@@ -102,6 +102,11 @@ public class BoardServiceImpl implements BoardService {
         return findBoard.getId();
     }
 
+    @Override
+    public Long addBoardScrap(String loginId, Long boardId) {
+        return null;
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)
