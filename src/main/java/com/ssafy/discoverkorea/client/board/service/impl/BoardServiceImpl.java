@@ -137,6 +137,11 @@ public class BoardServiceImpl implements BoardService {
         return boardScrapId;
     }
 
+    @Override
+    public Long decreaseScrapCount(Long boardId) {
+        return null;
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)

@@ -28,4 +28,6 @@ public interface BoardService {
     Long increaseScrapCount(Long boardId);
 
     Long cancelBoardScrap(String loginId, Long boardId);
+
+    Long decreaseScrapCount(Long boardId);
 }
