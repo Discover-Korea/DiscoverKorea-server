@@ -90,4 +90,16 @@ public class BoardApiController {
         log.debug("BoardDetailResponse={}", response);
         return response;
     }
+
+    @ApiOperation(value = "좋아요 등록")
+    @PostMapping("/{boardId}/like")
+    public void addBoardLike(@PathVariable Long boardId) {
+        log.debug("boardId={}", boardId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long boardLikeId = boardService.addBoardLike(loginId, boardId);
+        boardService.increaseLikeCount(boardId);
+        log.debug("addBoardLike={}", boardLikeId);
+    }
 }
