@@ -112,7 +112,7 @@ public class BoardApiController {
 
         Long boardLikeId = boardService.cancelBoardLike(loginId, boardId);
         boardService.decreaseLikeCount(boardId);
-        log.debug("addBoardLike={}", boardLikeId);
+        log.debug("cancelBoardLike={}", boardLikeId);
     }
 
     @ApiOperation(value = "스크랩 등록")
@@ -125,5 +125,17 @@ public class BoardApiController {
         Long boardScrapId = boardService.addBoardScrap(loginId, boardId);
         boardService.increaseScrapCount(boardId);
         log.debug("addBoardScrap={}", boardScrapId);
+    }
+
+    @ApiOperation(value = "스크랩 취소")
+    @DeleteMapping("/{boardId}/scrap")
+    public void cancelBoardScrap(@PathVariable Long boardId) {
+        log.debug("boardId={}", boardId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long boardScrapId = boardService.cancelBoardScrap(loginId, boardId);
+        boardService.decreaseScrapCount(boardId);
+        log.debug("cancelBoardScrap={}", boardScrapId);
     }
 }
