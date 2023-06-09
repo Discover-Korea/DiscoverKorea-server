@@ -198,6 +198,20 @@ class BoardServiceTest {
         assertThat(findBoard.get().getScrapCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("게시글 스크랩 취소")
+    void cancelBoardScrap() {
+        //given
+        BoardScrap boardScrap = insertBoardScrap();
+
+        //when
+        Long boardScrapId = boardService.cancelBoardScrap(boardScrap.getMember().getLoginId(), boardScrap.getBoard().getId());
+
+        //then
+        Optional<BoardScrap> findBoardScrap = boardScrapRepository.findById(boardScrapId);
+        assertThat(findBoardScrap).isEmpty();
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -228,5 +242,13 @@ class BoardServiceTest {
                 .board(insertBoard())
                 .build();
         return boardLikeRepository.save(boardLike);
+    }
+
+    private BoardScrap insertBoardScrap() {
+        BoardScrap boardScrap = BoardScrap.builder()
+                .member(insertMember())
+                .board(insertBoard())
+                .build();
+        return boardScrapRepository.save(boardScrap);
     }
 }
