@@ -57,4 +57,19 @@ class BoardTest {
         //then
         assertThat(board.getHitCount()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("게시물 좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        Board board = Board.builder()
+                .likeCount(0)
+                .build();
+
+        //when
+        board.increaseLikeCount();
+
+        //then
+        assertThat(board.getLikeCount()).isEqualTo(1);
+    }
 }
