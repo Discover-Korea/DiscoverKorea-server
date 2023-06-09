@@ -132,6 +132,22 @@ class BoardServiceTest {
         assertThat(findBoard.get().getLikeCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("게시글 좋아요 취소")
+    void cancelBoardLike() {
+        //given
+        BoardLike boardLike = insertBoardLike();
+
+        //when
+        Long boardLikeId = boardService.cancelBoardLike(
+                boardLike.getMember().getLoginId(),
+                boardLike.getBoard().getId());
+
+        //then
+        Optional<BoardLike> findBoardLike = boardLikeRepository.findById(boardLikeId);
+        assertThat(findBoardLike).isEmpty();
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -154,5 +170,13 @@ class BoardServiceTest {
                 .active(ACTIVE)
                 .build();
         return boardRepository.save(board);
+    }
+
+    private BoardLike insertBoardLike() {
+        BoardLike boardLike = BoardLike.builder()
+                .member(insertMember())
+                .board(insertBoard())
+                .build();
+        return boardLikeRepository.save(boardLike);
     }
 }
