@@ -2,8 +2,10 @@ package com.ssafy.discoverkorea.client.board.service.impl;
 
 import com.ssafy.discoverkorea.client.board.Board;
 import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.BoardScrap;
 import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
+import com.ssafy.discoverkorea.client.board.repository.BoardScrapRepository;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
@@ -22,6 +24,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final BoardScrapRepository boardScrapRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -104,7 +107,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long addBoardScrap(String loginId, Long boardId) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        BoardScrap boardScrap = BoardScrap.builder()
+                .member(findMember)
+                .board(Board.builder().id(boardId).build())
+                .build();
+
+        BoardScrap savedBoardScrap = boardScrapRepository.save(boardScrap);
+        return savedBoardScrap.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
