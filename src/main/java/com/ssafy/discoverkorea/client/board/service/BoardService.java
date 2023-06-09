@@ -16,4 +16,6 @@ public interface BoardService {
     Long increaseHitCount(Long boardId);
 
     Long addBoardLike(String loginId, Long boardId);
+
+    Long increaseLikeCount(Long boardId);
 }
