@@ -1,6 +1,8 @@
 package com.ssafy.discoverkorea.client.board.service.impl;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
@@ -19,6 +21,7 @@ import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardLikeRepository boardLikeRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -61,7 +64,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long addBoardLike(String loginId, Long boardId) {
-        return null;
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        BoardLike boardLike = BoardLike.builder()
+                .member(findMember)
+                .board(Board.builder().id(boardId).build())
+                .build();
+
+        BoardLike savedBoardLike = boardLikeRepository.save(boardLike);
+        return savedBoardLike.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
