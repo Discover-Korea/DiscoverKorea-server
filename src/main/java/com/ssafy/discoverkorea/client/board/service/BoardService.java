@@ -24,4 +24,6 @@ public interface BoardService {
     Long decreaseLikeCount(Long boardId);
 
     Long addBoardScrap(String loginId, Long boardId);
+
+    Long increaseScrapCount(Long boardId);
 }
