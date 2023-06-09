@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.client.board;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.common.entity.Active;
 import com.ssafy.discoverkorea.common.entity.TimeBaseEntity;
+import com.ssafy.discoverkorea.common.exception.NumberException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,5 +73,13 @@ public class Board extends TimeBaseEntity {
 
     public void increaseLikeCount() {
         this.likeCount += 1;
+    }
+
+    public void decreaseLikeCount() {
+        int likeCount = this.likeCount - 1;
+        if (likeCount < 0) {
+            throw new NumberException();
+        }
+        this.likeCount = likeCount;
     }
 }
