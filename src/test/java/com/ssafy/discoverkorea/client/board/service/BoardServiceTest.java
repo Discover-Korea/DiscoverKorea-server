@@ -183,6 +183,21 @@ class BoardServiceTest {
         assertThat(findBoardScrap).isPresent();
     }
 
+    @Test
+    @DisplayName("게시글 스크랩수 증가")
+    void increaseScrapCount() {
+        //given
+        Board board = insertBoard();
+
+        //when
+        Long boardId = boardService.increaseScrapCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getScrapCount()).isEqualTo(1);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
