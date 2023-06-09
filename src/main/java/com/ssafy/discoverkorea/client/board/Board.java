@@ -86,4 +86,12 @@ public class Board extends TimeBaseEntity {
     public void increaseScrapCount() {
         this.scrapCount += 1;
     }
+
+    public void decreaseScrapCount() {
+        int scrapCount = this.scrapCount - 1;
+        if (scrapCount < 0) {
+            throw new NumberException();
+        }
+        this.scrapCount = scrapCount;
+    }
 }
