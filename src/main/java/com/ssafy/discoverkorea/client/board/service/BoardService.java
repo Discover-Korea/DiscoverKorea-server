@@ -22,4 +22,12 @@ public interface BoardService {
     Long cancelBoardLike(String loginId, Long boardId);
 
     Long decreaseLikeCount(Long boardId);
+
+    Long addBoardScrap(String loginId, Long boardId);
+
+    Long increaseScrapCount(Long boardId);
+
+    Long cancelBoardScrap(String loginId, Long boardId);
+
+    Long decreaseScrapCount(Long boardId);
 }

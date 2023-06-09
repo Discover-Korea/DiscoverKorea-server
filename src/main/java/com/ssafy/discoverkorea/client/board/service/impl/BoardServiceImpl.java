@@ -2,8 +2,10 @@ package com.ssafy.discoverkorea.client.board.service.impl;
 
 import com.ssafy.discoverkorea.client.board.Board;
 import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.BoardScrap;
 import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
+import com.ssafy.discoverkorea.client.board.repository.BoardScrapRepository;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
@@ -22,6 +24,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final BoardScrapRepository boardScrapRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -99,6 +102,47 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(NoSuchElementException::new);
 
         findBoard.decreaseLikeCount();
+        return findBoard.getId();
+    }
+
+    @Override
+    public Long addBoardScrap(String loginId, Long boardId) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        BoardScrap boardScrap = BoardScrap.builder()
+                .member(findMember)
+                .board(Board.builder().id(boardId).build())
+                .build();
+
+        BoardScrap savedBoardScrap = boardScrapRepository.save(boardScrap);
+        return savedBoardScrap.getId();
+    }
+
+    @Override
+    public Long increaseScrapCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.increaseScrapCount();
+        return findBoard.getId();
+    }
+
+    @Override
+    public Long cancelBoardScrap(String loginId, Long boardId) {
+        Long boardScrapId = boardScrapRepository.findByLoginIdAndBoardId(loginId, boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        boardScrapRepository.deleteById(boardScrapId);
+        return boardScrapId;
+    }
+
+    @Override
+    public Long decreaseScrapCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.decreaseScrapCount();
         return findBoard.getId();
     }
 

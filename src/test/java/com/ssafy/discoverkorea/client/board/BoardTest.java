@@ -105,4 +105,49 @@ class BoardTest {
         //then
         assertThat(board.getLikeCount()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("게시물 스크랩수 증가")
+    void increaseScrapCount() {
+        //given
+        Board board = Board.builder()
+                .scrapCount(0)
+                .build();
+
+        //when
+        board.increaseScrapCount();
+
+        //then
+        assertThat(board.getScrapCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시물 스크랩수 감소#음수")
+    void scarpCountNegativeNumber() {
+        //given
+        Board board = Board.builder()
+                .scrapCount(0)
+                .build();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> board.decreaseScrapCount())
+                .isInstanceOf(NumberException.class);
+    }
+
+    @Test
+    @DisplayName("게시물 스크랩수 감소")
+    void decreaseScrapCount() {
+        //given
+        Board board = Board.builder()
+                .scrapCount(1)
+                .build();
+
+        //when
+        board.decreaseScrapCount();
+
+        //then
+        assertThat(board.getScrapCount()).isEqualTo(0);
+    }
 }

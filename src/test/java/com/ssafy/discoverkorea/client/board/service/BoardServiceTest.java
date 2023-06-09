@@ -2,8 +2,10 @@ package com.ssafy.discoverkorea.client.board.service;
 
 import com.ssafy.discoverkorea.client.board.Board;
 import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.BoardScrap;
 import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
+import com.ssafy.discoverkorea.client.board.repository.BoardScrapRepository;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
 import com.ssafy.discoverkorea.client.member.Member;
@@ -33,6 +35,8 @@ class BoardServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private BoardLikeRepository boardLikeRepository;
+    @Autowired
+    private BoardScrapRepository boardScrapRepository;
 
     @Test
     @DisplayName("게시글 등록")
@@ -164,6 +168,66 @@ class BoardServiceTest {
         assertThat(findBoard.get().getLikeCount()).isEqualTo(0);
     }
 
+    @Test
+    @DisplayName("게시글 스크랩 등록")
+    void addBoardScrap() {
+        //given
+        Member member = insertMember();
+        Board board = insertBoard();
+
+        //when
+        Long boardScrapId = boardService.addBoardScrap(member.getLoginId(), board.getId());
+
+        //then
+        Optional<BoardScrap> findBoardScrap = boardScrapRepository.findById(boardScrapId);
+        assertThat(findBoardScrap).isPresent();
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩수 증가")
+    void increaseScrapCount() {
+        //given
+        Board board = insertBoard();
+
+        //when
+        Long boardId = boardService.increaseScrapCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getScrapCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩 취소")
+    void cancelBoardScrap() {
+        //given
+        BoardScrap boardScrap = insertBoardScrap();
+
+        //when
+        Long boardScrapId = boardService.cancelBoardScrap(boardScrap.getMember().getLoginId(), boardScrap.getBoard().getId());
+
+        //then
+        Optional<BoardScrap> findBoardScrap = boardScrapRepository.findById(boardScrapId);
+        assertThat(findBoardScrap).isEmpty();
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩수 감소")
+    void decreaseScrapCount() {
+        //given
+        Board board = insertBoard();
+        board.increaseScrapCount();
+
+        //when
+        Long boardId = boardService.decreaseScrapCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getScrapCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -194,5 +258,13 @@ class BoardServiceTest {
                 .board(insertBoard())
                 .build();
         return boardLikeRepository.save(boardLike);
+    }
+
+    private BoardScrap insertBoardScrap() {
+        BoardScrap boardScrap = BoardScrap.builder()
+                .member(insertMember())
+                .board(insertBoard())
+                .build();
+        return boardScrapRepository.save(boardScrap);
     }
 }
