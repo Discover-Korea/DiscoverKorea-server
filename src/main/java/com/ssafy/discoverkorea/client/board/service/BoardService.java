@@ -18,4 +18,6 @@ public interface BoardService {
     Long addBoardLike(String loginId, Long boardId);
 
     Long increaseLikeCount(Long boardId);
+
+    Long cancelBoardLike(String loginId, Long boardId);
 }
