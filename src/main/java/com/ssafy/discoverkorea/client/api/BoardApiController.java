@@ -114,4 +114,16 @@ public class BoardApiController {
         boardService.decreaseLikeCount(boardId);
         log.debug("addBoardLike={}", boardLikeId);
     }
+
+    @ApiOperation(value = "스크랩 등록")
+    @PostMapping("/{boardId}/scrap")
+    public void addBoardScrap(@PathVariable Long boardId) {
+        log.debug("boardId={}", boardId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long boardScrapId = boardService.addBoardScrap(loginId, boardId);
+        boardService.increaseScrapCount(boardId);
+        log.debug("addBoardScrap={}", boardScrapId);
+    }
 }
