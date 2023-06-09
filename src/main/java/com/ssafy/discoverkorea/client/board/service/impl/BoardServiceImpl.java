@@ -95,7 +95,11 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long decreaseLikeCount(Long boardId) {
-        return null;
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.decreaseLikeCount();
+        return findBoard.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
