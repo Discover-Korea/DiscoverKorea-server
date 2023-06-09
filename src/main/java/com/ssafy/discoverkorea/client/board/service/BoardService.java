@@ -20,4 +20,6 @@ public interface BoardService {
     Long increaseLikeCount(Long boardId);
 
     Long cancelBoardLike(String loginId, Long boardId);
+
+    Long decreaseLikeCount(Long boardId);
 }

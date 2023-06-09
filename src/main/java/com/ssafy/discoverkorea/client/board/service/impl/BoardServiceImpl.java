@@ -93,6 +93,11 @@ public class BoardServiceImpl implements BoardService {
         return boardLikeId;
     }
 
+    @Override
+    public Long decreaseLikeCount(Long boardId) {
+        return null;
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)
