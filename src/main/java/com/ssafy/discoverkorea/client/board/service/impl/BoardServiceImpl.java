@@ -1,6 +1,8 @@
 package com.ssafy.discoverkorea.client.board.service.impl;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.BoardService;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
@@ -19,6 +21,7 @@ import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardLikeRepository boardLikeRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -56,6 +59,46 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(NoSuchElementException::new);
 
         findBoard.increaseHitCount();
+        return findBoard.getId();
+    }
+
+    @Override
+    public Long addBoardLike(String loginId, Long boardId) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        BoardLike boardLike = BoardLike.builder()
+                .member(findMember)
+                .board(Board.builder().id(boardId).build())
+                .build();
+
+        BoardLike savedBoardLike = boardLikeRepository.save(boardLike);
+        return savedBoardLike.getId();
+    }
+
+    @Override
+    public Long increaseLikeCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.increaseLikeCount();
+        return findBoard.getId();
+    }
+
+    @Override
+    public Long cancelBoardLike(String loginId, Long boardId) {
+        Long boardLikeId = boardLikeRepository.findByLoginIdAndBoardId(loginId, boardId)
+                .orElseThrow(NoSuchElementException::new);
+        boardLikeRepository.deleteById(boardLikeId);
+        return boardLikeId;
+    }
+
+    @Override
+    public Long decreaseLikeCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(NoSuchElementException::new);
+
+        findBoard.decreaseLikeCount();
         return findBoard.getId();
     }
 

@@ -1,11 +1,13 @@
 package com.ssafy.discoverkorea.client.board;
 
+import com.ssafy.discoverkorea.common.exception.NumberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
 import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BoardTest {
 
@@ -56,5 +58,51 @@ class BoardTest {
 
         //then
         assertThat(board.getHitCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시물 좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        Board board = Board.builder()
+                .likeCount(0)
+                .build();
+
+        //when
+        board.increaseLikeCount();
+
+        //then
+        assertThat(board.getLikeCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시물 좋아요수 감소#음수")
+    void likeCountNegativeNumber() {
+        //given
+        Board board = Board.builder()
+                .likeCount(0)
+                .build();
+            
+        //when
+            
+        //then
+        assertThatThrownBy(() -> board.decreaseLikeCount())
+                .isInstanceOf(NumberException.class);
+        
+    }
+    
+    @Test
+    @DisplayName("게시물 좋아요수 감소")
+    void decreaseLikeCount() {
+        //given
+        Board board = Board.builder()
+                .likeCount(1)
+                .build();
+
+        //when
+        board.decreaseLikeCount();
+
+        //then
+        assertThat(board.getLikeCount()).isEqualTo(0);
     }
 }

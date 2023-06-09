@@ -1,6 +1,8 @@
 package com.ssafy.discoverkorea.client.board.service;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardLike;
+import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.service.dto.AddBoardDto;
 import com.ssafy.discoverkorea.client.board.service.dto.EditBoardDto;
@@ -29,6 +31,8 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private BoardLikeRepository boardLikeRepository;
 
     @Test
     @DisplayName("게시글 등록")
@@ -98,6 +102,68 @@ class BoardServiceTest {
         assertThat(findBoard.get().getHitCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("게시글 좋아요 등록")
+    void addBoardLike() {
+        //given
+        Member member = insertMember();
+        Board board = insertBoard();
+
+        //when
+        Long boardLikeId = boardService.addBoardLike(member.getLoginId(), board.getId());
+
+        //then
+        Optional<BoardLike> findBoardLike = boardLikeRepository.findById(boardLikeId);
+        assertThat(findBoardLike).isPresent();
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        Board board = insertBoard();
+
+        //when
+        Long boardId = boardService.increaseLikeCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getLikeCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 취소")
+    void cancelBoardLike() {
+        //given
+        BoardLike boardLike = insertBoardLike();
+
+        //when
+        Long boardLikeId = boardService.cancelBoardLike(
+                boardLike.getMember().getLoginId(),
+                boardLike.getBoard().getId());
+
+        //then
+        Optional<BoardLike> findBoardLike = boardLikeRepository.findById(boardLikeId);
+        assertThat(findBoardLike).isEmpty();
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요수 감소")
+    void decreaseLikeCount() {
+        //given
+        Board board = insertBoard();
+        board.increaseLikeCount();
+
+        //when
+        Long boardId = boardService.decreaseLikeCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getLikeCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -120,5 +186,13 @@ class BoardServiceTest {
                 .active(ACTIVE)
                 .build();
         return boardRepository.save(board);
+    }
+
+    private BoardLike insertBoardLike() {
+        BoardLike boardLike = BoardLike.builder()
+                .member(insertMember())
+                .board(insertBoard())
+                .build();
+        return boardLikeRepository.save(boardLike);
     }
 }
