@@ -82,4 +82,8 @@ public class Board extends TimeBaseEntity {
         }
         this.likeCount = likeCount;
     }
+
+    public void increaseScrapCount() {
+        this.scrapCount += 1;
+    }
 }
