@@ -148,6 +148,22 @@ class BoardServiceTest {
         assertThat(findBoardLike).isEmpty();
     }
 
+    @Test
+    @DisplayName("게시글 좋아요수 감소")
+    void decreaseLikeCount() {
+        //given
+        Board board = insertBoard();
+        board.increaseLikeCount();
+
+        //when
+        Long boardId = boardService.decreaseLikeCount(board.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getLikeCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
