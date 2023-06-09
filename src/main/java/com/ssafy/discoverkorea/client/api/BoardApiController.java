@@ -102,4 +102,16 @@ public class BoardApiController {
         boardService.increaseLikeCount(boardId);
         log.debug("addBoardLike={}", boardLikeId);
     }
+
+    @ApiOperation(value = "좋아요 취소")
+    @DeleteMapping("/{boardId}/like")
+    public void cancelBoardLike(@PathVariable Long boardId) {
+        log.debug("boardId={}", boardId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long boardLikeId = boardService.cancelBoardLike(loginId, boardId);
+        boardService.decreaseLikeCount(boardId);
+        log.debug("addBoardLike={}", boardLikeId);
+    }
 }
