@@ -146,6 +146,11 @@ public class BoardServiceImpl implements BoardService {
         return findBoard.getId();
     }
 
+    @Override
+    public Long addBoardComment(String loginId, Long parentId, String content) {
+        return null;
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)
