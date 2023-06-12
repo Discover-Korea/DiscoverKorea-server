@@ -150,4 +150,14 @@ public class BoardApiController {
         Long boardCommentId = boardService.addBoardComment(loginId, boardId, request.getParentId(), request.getContent());
         log.debug("addBoardComment={}", boardCommentId);
     }
+
+    @ApiOperation(value = "댓글 삭제")
+    @DeleteMapping("/{boardId}/comment/{boardCommentId}")
+    public void removeBoardComment(@PathVariable Long boardId, @PathVariable Long boardCommentId) {
+        log.debug("boardId={}", boardId);
+        log.debug("boardCommentId={}", boardCommentId);
+
+        Long removedBoardCommentId = boardService.removeBoardComment(boardCommentId);
+        log.debug("removeBoardComment={}", removedBoardCommentId);
+    }
 }
