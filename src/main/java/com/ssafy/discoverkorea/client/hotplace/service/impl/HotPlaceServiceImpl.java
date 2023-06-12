@@ -5,6 +5,7 @@ import com.ssafy.discoverkorea.client.hotplace.Place;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.HotPlaceService;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
+import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.client.member.Member;
 import com.ssafy.discoverkorea.client.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,10 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         HotPlace savedHotPlace = hotPlaceRepository.save(hotPlace);
         return savedHotPlace.getId();
+    }
+
+    @Override
+    public Long editHotPlace(Long hotPlaceId, EditHotPlaceDto dto) {
+        return null;
     }
 }
