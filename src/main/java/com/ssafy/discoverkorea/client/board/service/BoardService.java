@@ -31,7 +31,7 @@ public interface BoardService {
 
     Long decreaseScrapCount(Long boardId);
 
-    Long addBoardComment(String loginId, Long parentId, String content);
+    Long addBoardComment(String loginId, Long boardId, Long parentId, String content);
 
     Long removeBoardComment(Long boardCommentId);
 }
