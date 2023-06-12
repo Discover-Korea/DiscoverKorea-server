@@ -247,6 +247,21 @@ class BoardServiceTest {
         assertThat(findBoardComment).isPresent();
     }
 
+    @Test
+    @DisplayName("게시글 댓글 삭제")
+    void removeBoardComment() {
+        //given
+        BoardComment boardComment = insertBoardComment();
+
+        //when
+        Long boardCommentId = boardService.removeBoardComment(boardComment.getId());
+
+        //then
+        Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
+        assertThat(findBoardComment).isPresent();
+        assertThat(findBoardComment.get().getActive()).isEqualTo(DEACTIVE);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -285,5 +300,15 @@ class BoardServiceTest {
                 .board(insertBoard())
                 .build();
         return boardScrapRepository.save(boardScrap);
+    }
+
+    private BoardComment insertBoardComment() {
+        BoardComment boardComment = BoardComment.builder()
+                .content("board comment content")
+                .member(insertMember())
+                .board(insertBoard())
+                .active(ACTIVE)
+                .build();
+        return boardCommentRepository.save(boardComment);
     }
 }
