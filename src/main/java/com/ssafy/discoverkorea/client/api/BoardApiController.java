@@ -147,7 +147,7 @@ public class BoardApiController {
         String loginId = SecurityUtil.getCurrentLoginId();
         log.debug("loginId={}", loginId);
 
-        Long boardCommentId = boardService.addBoardComment(loginId, request.getParentId(), request.getContent());
+        Long boardCommentId = boardService.addBoardComment(loginId, boardId, request.getParentId(), request.getContent());
         log.debug("addBoardComment={}", boardCommentId);
     }
 }
