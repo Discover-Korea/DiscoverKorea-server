@@ -237,9 +237,10 @@ class BoardServiceTest {
     void addBoardComment() {
         //given
         Member member = insertMember();
+        Board board = insertBoard();
 
         //when
-        Long boardCommentId = boardService.addBoardComment(member.getLoginId(), null, "board comment content");
+        Long boardCommentId = boardService.addBoardComment(member.getLoginId(), board.getId(), null, "board comment content");
 
         //then
         Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
