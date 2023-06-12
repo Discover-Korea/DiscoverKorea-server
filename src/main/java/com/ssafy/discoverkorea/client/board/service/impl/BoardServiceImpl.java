@@ -167,6 +167,11 @@ public class BoardServiceImpl implements BoardService {
         return savedBoardComment.getId();
     }
 
+    @Override
+    public Long removeBoardComment(Long boardCommentId) {
+        return null;
+    }
+
     private Board toBoard(AddBoardDto dto, Member member) {
         return Board.builder()
                 .member(member)
