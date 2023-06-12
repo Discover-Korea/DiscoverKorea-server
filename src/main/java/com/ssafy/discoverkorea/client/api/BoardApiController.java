@@ -1,5 +1,6 @@
 package com.ssafy.discoverkorea.client.api;
 
+import com.ssafy.discoverkorea.client.api.request.board.AddBoardCommentRequest;
 import com.ssafy.discoverkorea.client.api.request.board.AddBoardRequest;
 import com.ssafy.discoverkorea.client.api.request.board.EditBoardRequest;
 import com.ssafy.discoverkorea.client.api.response.board.BoardDetailResponse;
@@ -137,5 +138,16 @@ public class BoardApiController {
         Long boardScrapId = boardService.cancelBoardScrap(loginId, boardId);
         boardService.decreaseScrapCount(boardId);
         log.debug("cancelBoardScrap={}", boardScrapId);
+    }
+
+    @ApiOperation(value = "댓글 등록")
+    @PostMapping("/{boardId}/comment")
+    public void addBoardComment(@PathVariable Long boardId, @Valid @RequestBody AddBoardCommentRequest request) {
+        log.debug("boardId={}", boardId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long boardCommentId = boardService.addBoardComment(loginId, request.getParentId(), request.getContent());
+        log.debug("addBoardComment={}", boardCommentId);
     }
 }

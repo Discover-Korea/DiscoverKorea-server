@@ -1,8 +1,10 @@
 package com.ssafy.discoverkorea.client.board.service.impl;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardComment;
 import com.ssafy.discoverkorea.client.board.BoardLike;
 import com.ssafy.discoverkorea.client.board.BoardScrap;
+import com.ssafy.discoverkorea.client.board.repository.BoardCommentRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardScrapRepository;
@@ -25,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final BoardScrapRepository boardScrapRepository;
+    private final BoardCommentRepository boardCommentRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -144,6 +147,24 @@ public class BoardServiceImpl implements BoardService {
 
         findBoard.decreaseScrapCount();
         return findBoard.getId();
+    }
+
+    @Override
+    public Long addBoardComment(String loginId, Long parentId, String content) {
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        BoardComment boardComment = BoardComment.builder()
+                .content(content)
+                .member(findMember)
+                .parent(BoardComment.builder()
+                        .id(parentId)
+                        .build())
+                .active(ACTIVE)
+                .build();
+
+        BoardComment savedBoardComment = boardCommentRepository.save(boardComment);
+        return savedBoardComment.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {

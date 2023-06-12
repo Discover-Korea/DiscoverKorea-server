@@ -1,8 +1,10 @@
 package com.ssafy.discoverkorea.client.board.service;
 
 import com.ssafy.discoverkorea.client.board.Board;
+import com.ssafy.discoverkorea.client.board.BoardComment;
 import com.ssafy.discoverkorea.client.board.BoardLike;
 import com.ssafy.discoverkorea.client.board.BoardScrap;
+import com.ssafy.discoverkorea.client.board.repository.BoardCommentRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardLikeRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardRepository;
 import com.ssafy.discoverkorea.client.board.repository.BoardScrapRepository;
@@ -37,6 +39,8 @@ class BoardServiceTest {
     private BoardLikeRepository boardLikeRepository;
     @Autowired
     private BoardScrapRepository boardScrapRepository;
+    @Autowired
+    private BoardCommentRepository boardCommentRepository;
 
     @Test
     @DisplayName("게시글 등록")
@@ -226,6 +230,20 @@ class BoardServiceTest {
         Optional<Board> findBoard = boardRepository.findById(boardId);
         assertThat(findBoard).isPresent();
         assertThat(findBoard.get().getScrapCount()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("게시글 댓글 등록")
+    void addBoardComment() {
+        //given
+        Member member = insertMember();
+
+        //when
+        Long boardCommentId = boardService.addBoardComment(member.getLoginId(), null, "board comment content");
+
+        //then
+        Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
+        assertThat(findBoardComment).isPresent();
     }
 
     private Member insertMember() {
