@@ -237,13 +237,29 @@ class BoardServiceTest {
     void addBoardComment() {
         //given
         Member member = insertMember();
+        Board board = insertBoard();
 
         //when
-        Long boardCommentId = boardService.addBoardComment(member.getLoginId(), null, "board comment content");
+        Long boardCommentId = boardService.addBoardComment(member.getLoginId(), board.getId(), null, "board comment content");
 
         //then
         Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
         assertThat(findBoardComment).isPresent();
+    }
+
+    @Test
+    @DisplayName("게시글 댓글 삭제")
+    void removeBoardComment() {
+        //given
+        BoardComment boardComment = insertBoardComment();
+
+        //when
+        Long boardCommentId = boardService.removeBoardComment(boardComment.getId());
+
+        //then
+        Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
+        assertThat(findBoardComment).isPresent();
+        assertThat(findBoardComment.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private Member insertMember() {
@@ -284,5 +300,15 @@ class BoardServiceTest {
                 .board(insertBoard())
                 .build();
         return boardScrapRepository.save(boardScrap);
+    }
+
+    private BoardComment insertBoardComment() {
+        BoardComment boardComment = BoardComment.builder()
+                .content("board comment content")
+                .member(insertMember())
+                .board(insertBoard())
+                .active(ACTIVE)
+                .build();
+        return boardCommentRepository.save(boardComment);
     }
 }

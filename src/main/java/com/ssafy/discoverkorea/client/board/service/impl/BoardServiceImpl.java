@@ -150,13 +150,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long addBoardComment(String loginId, Long parentId, String content) {
+    public Long addBoardComment(String loginId, Long boardId, Long parentId, String content) {
         Member findMember = memberRepository.findByLoginId(loginId)
                 .orElseThrow(NoSuchElementException::new);
 
         BoardComment boardComment = BoardComment.builder()
                 .content(content)
                 .member(findMember)
+                .board(Board.builder()
+                        .id(boardId)
+                        .build())
                 .parent(BoardComment.builder()
                         .id(parentId)
                         .build())
@@ -165,6 +168,16 @@ public class BoardServiceImpl implements BoardService {
 
         BoardComment savedBoardComment = boardCommentRepository.save(boardComment);
         return savedBoardComment.getId();
+    }
+
+    @Override
+    public Long removeBoardComment(Long boardCommentId) {
+        BoardComment boardComment = boardCommentRepository.findById(boardCommentId)
+                .orElseThrow(NoSuchElementException::new);
+
+        boardComment.remove();
+
+        return boardComment.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {

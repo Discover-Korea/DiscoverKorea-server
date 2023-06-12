@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -34,16 +35,25 @@ public class BoardComment extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private BoardComment parent;
 
     //== 생성자 ==//
     @Builder
-    public BoardComment(Long id, String content, Active active, Member member, BoardComment parent) {
+    public BoardComment(Long id, String content, Active active, Member member, Board board, BoardComment parent) {
         this.id = id;
         this.content = content;
         this.active = active;
         this.member = member;
+        this.board = board;
         this.parent = parent;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void remove() {
+        this.active = DEACTIVE;
     }
 }
