@@ -172,7 +172,12 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long removeBoardComment(Long boardCommentId) {
-        return null;
+        BoardComment boardComment = boardCommentRepository.findById(boardCommentId)
+                .orElseThrow(NoSuchElementException::new);
+
+        boardComment.remove();
+
+        return boardComment.getId();
     }
 
     private Board toBoard(AddBoardDto dto, Member member) {
