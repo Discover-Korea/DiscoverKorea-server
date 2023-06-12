@@ -35,16 +35,20 @@ public class BoardComment extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private BoardComment parent;
 
     //== 생성자 ==//
     @Builder
-    public BoardComment(Long id, String content, Active active, Member member, BoardComment parent) {
+    public BoardComment(Long id, String content, Active active, Member member, Board board, BoardComment parent) {
         this.id = id;
         this.content = content;
         this.active = active;
         this.member = member;
+        this.board = board;
         this.parent = parent;
     }
 
