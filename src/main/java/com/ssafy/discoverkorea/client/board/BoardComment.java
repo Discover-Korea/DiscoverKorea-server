@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -45,5 +46,10 @@ public class BoardComment extends TimeBaseEntity {
         this.active = active;
         this.member = member;
         this.parent = parent;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void remove() {
+        this.active = DEACTIVE;
     }
 }
