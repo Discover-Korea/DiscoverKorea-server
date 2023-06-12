@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class HotPlaceImage extends TimeBaseEntity {
 
     @Id @GeneratedValue
-    @Column(name = "hot_place_id")
+    @Column(name = "hot_place_image_id")
     private Long id;
     @Embedded
     private UploadFile file;
