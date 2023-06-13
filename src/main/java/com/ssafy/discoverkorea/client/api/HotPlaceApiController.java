@@ -85,4 +85,15 @@ public class HotPlaceApiController {
         Long hotPlaceLikeId = hotPlaceService.addLike(loginId, hotPlaceId);
         log.debug("addHotPlaceLike={}", hotPlaceLikeId);
     }
+
+    @ApiOperation(value = "핫플레이스 좋아요 취소")
+    @DeleteMapping("/{hotPlaceId}/like")
+    public void cancelHotPlaceLike(@PathVariable Long hotPlaceId) {
+        log.debug("hotPlaceId={}", hotPlaceId);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long hotPlaceLikeId = hotPlaceService.cancelLike(loginId, hotPlaceId);
+        log.debug("addHotPlaceLike={}", hotPlaceLikeId);
+    }
 }
