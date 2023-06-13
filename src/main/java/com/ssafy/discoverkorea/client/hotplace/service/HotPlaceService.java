@@ -12,4 +12,6 @@ public interface HotPlaceService {
     Long editHotPlace(Long hotPlaceId, EditHotPlaceDto dto);
 
     Long removeHotPlace(Long hotPlaceId);
+
+    Long increaseHitCount(Long hotPlaceId);
 }

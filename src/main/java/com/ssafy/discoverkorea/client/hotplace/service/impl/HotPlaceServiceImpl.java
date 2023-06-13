@@ -71,4 +71,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         hotPlace.remove();
         return hotPlace.getId();
     }
+
+    @Override
+    public Long increaseHitCount(Long hotPlaceId) {
+        return null;
+    }
 }
