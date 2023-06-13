@@ -223,6 +223,46 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getScrapCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("핫플레이스 스크랩 취소")
+    void cancelScrap() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        HotPlaceScrap hotPlaceScrap = HotPlaceScrap.builder()
+                .member(member).hotPlace(hotPlace)
+                .build();
+        hotPlaceScrapRepository.save(hotPlaceScrap);
+
+        //when
+        Long hotPlaceScrapId = hotPlaceService.cancelScrap(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlaceScrap> findHotPlaceScrap = hotPlaceScrapRepository.findById(hotPlaceScrapId);
+        assertThat(findHotPlaceScrap).isEmpty();
+    }
+
+    @Test
+    @DisplayName("핫플레이스 스크랩수 감소")
+    void decreaseScrapCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        hotPlace.increaseScrapCount();
+        HotPlaceScrap hotPlaceScrap = HotPlaceScrap.builder()
+                .member(member).hotPlace(hotPlace)
+                .build();
+        hotPlaceScrapRepository.save(hotPlaceScrap);
+
+        //when
+        Long hotPlaceScrapId = hotPlaceService.cancelScrap(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getScrapCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")

@@ -117,4 +117,8 @@ public class HotPlace extends TimeBaseEntity {
     public void increaseScrapCount() {
         this.scrapCount += 1;
     }
+
+    public void decreaseScrapCount() {
+        this.scrapCount -= 1;
+    }
 }

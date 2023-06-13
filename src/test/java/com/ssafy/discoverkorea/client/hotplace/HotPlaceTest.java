@@ -99,4 +99,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getScrapCount()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("스크랩수 감소")
+    void decreaseScrapCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .scrapCount(1)
+                .build();
+
+        //when
+        hotPlace.decreaseScrapCount();
+
+        //then
+        assertThat(hotPlace.getScrapCount()).isEqualTo(0);
+    }
 }

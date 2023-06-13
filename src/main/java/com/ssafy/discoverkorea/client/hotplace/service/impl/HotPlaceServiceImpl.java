@@ -133,4 +133,17 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         return savedHotPlaceScrap.getId();
     }
+
+    @Override
+    public Long cancelScrap(String loginId, Long hotPlaceId) {
+        Long hotPlaceScrapId = hotPlaceScrapRepository.findByLoginIdAndHotPlaceId(loginId, hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+        hotPlace.decreaseScrapCount();
+
+        hotPlaceScrapRepository.deleteById(hotPlaceScrapId);
+        return hotPlaceScrapId;
+    }
 }
