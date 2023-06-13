@@ -105,6 +105,14 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
     @Override
     public Long cancelLike(String loginId, Long hotPlaceId) {
-        return null;
+        Long hotPlaceLikeId = hotPlaceLikeRepository.findByLoginIdAndHotPlaceId(loginId, hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+        hotPlace.decreaseLikeCount();
+
+        hotPlaceLikeRepository.deleteById(hotPlaceLikeId);
+        return hotPlaceLikeId;
     }
 }
