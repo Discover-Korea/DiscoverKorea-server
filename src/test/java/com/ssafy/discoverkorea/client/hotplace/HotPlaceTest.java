@@ -39,4 +39,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getActive()).isEqualTo(DEACTIVE);
     }
+
+    @Test
+    @DisplayName("조회수 증가")
+    void increaseHitCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .hitCount(0)
+                .build();
+
+        //when
+        hotPlace.increaseHitCount();
+
+        //then
+        assertThat(hotPlace.getHitCount()).isEqualTo(1);
+    }
 }

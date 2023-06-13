@@ -101,4 +101,8 @@ public class HotPlace extends TimeBaseEntity {
     public void remove() {
         this.active = DEACTIVE;
     }
+
+    public void increaseHitCount() {
+        this.hitCount += 1;
+    }
 }

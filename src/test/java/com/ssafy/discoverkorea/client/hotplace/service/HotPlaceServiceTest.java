@@ -98,6 +98,21 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getActive()).isEqualTo(DEACTIVE);
     }
 
+    @Test
+    @DisplayName("핫플레이스 조회수 증가")
+    void increaseHitCount() {
+        //given
+        HotPlace hotPlace = insertHotPlace();
+
+        //when
+        Long hotPlaceId = hotPlaceService.increaseHitCount(hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getHitCount()).isEqualTo(1);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
