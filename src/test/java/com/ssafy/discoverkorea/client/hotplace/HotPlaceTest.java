@@ -84,4 +84,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getLikeCount()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("스크랩수 증가")
+    void increaseScrapCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .scrapCount(0)
+                .build();
+
+        //when
+        hotPlace.increaseScrapCount();
+
+        //then
+        assertThat(hotPlace.getScrapCount()).isEqualTo(1);
+    }
 }
