@@ -97,4 +97,8 @@ public class HotPlace extends TimeBaseEntity {
         this.place = place;
         this.images = images;
     }
+
+    public void remove() {
+        this.active = DEACTIVE;
+    }
 }
