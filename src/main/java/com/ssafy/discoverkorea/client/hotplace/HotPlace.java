@@ -90,4 +90,11 @@ public class HotPlace extends TimeBaseEntity {
     private void insertImages(List<HotPlaceImage> images) {
         this.images = images;
     }
+
+    //== 비즈니스 로직 ==//
+    public void edit(String content, Place place, List<HotPlaceImage> images) {
+        this.content = content;
+        this.place = place;
+        this.images = images;
+    }
 }
