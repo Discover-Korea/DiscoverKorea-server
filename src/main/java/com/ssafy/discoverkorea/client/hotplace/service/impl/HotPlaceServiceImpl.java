@@ -102,4 +102,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         return savedHotPlaceLike.getId();
     }
+
+    @Override
+    public Long cancelLike(String loginId, Long hotPlaceId) {
+        return null;
+    }
 }

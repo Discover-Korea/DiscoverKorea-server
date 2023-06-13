@@ -16,4 +16,6 @@ public interface HotPlaceService {
     Long increaseHitCount(Long hotPlaceId);
 
     Long addLike(String loginId, Long hotPlaceId);
+
+    Long cancelLike(String loginId, Long hotPlaceId);
 }
