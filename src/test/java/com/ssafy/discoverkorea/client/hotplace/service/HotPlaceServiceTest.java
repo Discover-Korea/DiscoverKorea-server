@@ -1,7 +1,9 @@
 package com.ssafy.discoverkorea.client.hotplace.service;
 
 import com.ssafy.discoverkorea.client.hotplace.HotPlace;
+import com.ssafy.discoverkorea.client.hotplace.HotPlaceLike;
 import com.ssafy.discoverkorea.client.hotplace.Place;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
@@ -33,6 +35,8 @@ class HotPlaceServiceTest {
     private HotPlaceRepository hotPlaceRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private HotPlaceLikeRepository hotPlaceLikeRepository;
 
     @Test
     @DisplayName("핫플레이스 등록")
@@ -113,6 +117,37 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getHitCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("핫플레이스 좋아요 등록")
+    void addLike() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlaceLike> findHotPlaceLike = hotPlaceLikeRepository.findById(hotPlaceLikeId);
+        assertThat(findHotPlaceLike).isPresent();
+    }
+
+    @Test
+    @DisplayName("핫플레이스 좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getLikeCount()).isEqualTo(1);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
@@ -140,6 +175,21 @@ class HotPlaceServiceTest {
                 .latitude(37.51113059993883)
                 .build();
         HotPlace hotPlace = HotPlace.createHotPlace(null, "hotPlace content", place, Collections.singletonList(file));
+        return hotPlaceRepository.save(hotPlace);
+    }
+
+    private HotPlace insertHotPlace(Long memberId) {
+        UploadFile file = UploadFile.builder()
+                .uploadFileName("uploadFileName.jpg")
+                .storeFileName("storeFileName.jpg")
+                .build();
+        Place place = Place.builder()
+                .placeName("롯데월드")
+                .roadAddress("서울 송파구 올림픽로 240")
+                .longitude(127.09811980036908)
+                .latitude(37.51113059993883)
+                .build();
+        HotPlace hotPlace = HotPlace.createHotPlace(memberId, "hotPlace content", place, Collections.singletonList(file));
         return hotPlaceRepository.save(hotPlace);
     }
 }

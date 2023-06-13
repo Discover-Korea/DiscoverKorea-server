@@ -54,4 +54,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getHitCount()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .likeCount(0)
+                .build();
+
+        //when
+        hotPlace.increaseLikeCount();
+
+        //then
+        assertThat(hotPlace.getLikeCount()).isEqualTo(1);
+    }
 }

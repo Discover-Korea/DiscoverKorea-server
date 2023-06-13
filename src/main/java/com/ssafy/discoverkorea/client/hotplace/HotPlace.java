@@ -105,4 +105,8 @@ public class HotPlace extends TimeBaseEntity {
     public void increaseHitCount() {
         this.hitCount += 1;
     }
+
+    public void increaseLikeCount() {
+        this.likeCount += 1;
+    }
 }
