@@ -148,6 +148,46 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getLikeCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("핫플레이스 좋아요 취소")
+    void cancelLike() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        HotPlaceLike hotPlaceLike = HotPlaceLike.builder()
+                .member(member).hotPlace(hotPlace)
+                .build();
+        hotPlaceLikeRepository.save(hotPlaceLike);
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.cancelLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlaceLike> findHotPlaceLike = hotPlaceLikeRepository.findById(hotPlaceLikeId);
+        assertThat(findHotPlaceLike).isEmpty();
+    }
+
+    @Test
+    @DisplayName("핫플레이스 좋아요수 감소")
+    void decreaseLikeCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        hotPlace.increaseLikeCount();
+        HotPlaceLike hotPlaceLike = HotPlaceLike.builder()
+                .member(member).hotPlace(hotPlace)
+                .build();
+        hotPlaceLikeRepository.save(hotPlaceLike);
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.cancelLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getLikeCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
