@@ -2,9 +2,11 @@ package com.ssafy.discoverkorea.client.hotplace.service;
 
 import com.ssafy.discoverkorea.client.hotplace.HotPlace;
 import com.ssafy.discoverkorea.client.hotplace.HotPlaceLike;
+import com.ssafy.discoverkorea.client.hotplace.HotPlaceScrap;
 import com.ssafy.discoverkorea.client.hotplace.Place;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceScrapRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.client.member.Member;
@@ -37,6 +39,8 @@ class HotPlaceServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private HotPlaceLikeRepository hotPlaceLikeRepository;
+    @Autowired
+    private HotPlaceScrapRepository hotPlaceScrapRepository;
 
     @Test
     @DisplayName("핫플레이스 등록")
@@ -186,6 +190,37 @@ class HotPlaceServiceTest {
         Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
         assertThat(findHotPlace).isPresent();
         assertThat(findHotPlace.get().getLikeCount()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("핫플레이스 스크랩 등록")
+    void addScrap() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+
+        //when
+        Long hotPlaceScrapId = hotPlaceService.addScrap(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlaceScrap> findHotPlaceScrap= hotPlaceScrapRepository.findById(hotPlaceScrapId);
+        assertThat(findHotPlaceScrap).isPresent();
+    }
+
+    @Test
+    @DisplayName("핫플레이스 스크랩수 증가")
+    void increaseScrapCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+
+        //when
+        Long hotPlaceScrapId = hotPlaceService.addScrap(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getScrapCount()).isEqualTo(1);
     }
 
     private Member insertMember() {
