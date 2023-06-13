@@ -39,6 +39,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
     @Override
     public Long editHotPlace(Long hotPlaceId, EditHotPlaceDto dto) {
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
         return null;
     }
 }
