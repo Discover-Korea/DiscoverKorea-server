@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static com.ssafy.discoverkorea.client.member.Gender.MALE;
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -80,6 +81,21 @@ class HotPlaceServiceTest {
         Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
         assertThat(findHotPlace).isPresent();
         assertThat(findHotPlace.get().getContent()).isEqualTo(dto.getContent());
+    }
+
+    @Test
+    @DisplayName("핫플레이스 삭제")
+    void removeHotPlace() {
+        //given
+        HotPlace hotPlace = insertHotPlace();
+
+        //when
+        Long hotPlaceId = hotPlaceService.removeHotPlace(hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private Member insertMember() {

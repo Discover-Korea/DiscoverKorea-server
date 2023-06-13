@@ -62,4 +62,13 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         hotPlace.edit(dto.getContent(), place, images);
         return hotPlace.getId();
     }
+
+    @Override
+    public Long removeHotPlace(Long hotPlaceId) {
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        hotPlace.remove();
+        return hotPlace.getId();
+    }
 }

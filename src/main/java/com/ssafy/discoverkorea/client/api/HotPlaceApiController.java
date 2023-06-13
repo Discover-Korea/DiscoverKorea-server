@@ -67,4 +67,11 @@ public class HotPlaceApiController {
         Long editedHotPlaceId = hotPlaceService.editHotPlace(hotPlaceId, dto);
         log.debug("editHotPlace={}", editedHotPlaceId);
     }
+
+    @ApiOperation(value = "핫플레이스 삭제")
+    @DeleteMapping("/{hotPlaceId}")
+    public void removeHotPlace(@PathVariable Long hotPlaceId) {
+        Long removedHotPlaceId = hotPlaceService.removeHotPlace(hotPlaceId);
+        log.debug("removedHotPlace={}", removedHotPlaceId);
+    }
 }
