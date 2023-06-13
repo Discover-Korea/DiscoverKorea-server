@@ -80,4 +80,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         hotPlace.increaseHitCount();
         return hotPlace.getId();
     }
+
+    @Override
+    public Long addLike(String loginId, Long hotPlaceId) {
+        return null;
+    }
 }
