@@ -20,4 +20,6 @@ public interface HotPlaceService {
     Long cancelLike(String loginId, Long hotPlaceId);
 
     Long addScrap(String loginId, Long hotPlaceId);
+
+    Long cancelScrap(String loginId, Long hotPlaceId);
 }

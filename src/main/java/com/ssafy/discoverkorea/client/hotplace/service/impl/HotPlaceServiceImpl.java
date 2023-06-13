@@ -133,4 +133,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         return savedHotPlaceScrap.getId();
     }
+
+    @Override
+    public Long cancelScrap(String loginId, Long hotPlaceId) {
+        return null;
+    }
 }
