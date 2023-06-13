@@ -122,7 +122,7 @@ class HotPlaceServiceTest {
     void addLike() {
         //given
         Member member = insertMember();
-        HotPlace hotPlace = insertHotPlace();
+        HotPlace hotPlace = insertHotPlace(member.getId());
 
         //when
         Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
@@ -137,7 +137,7 @@ class HotPlaceServiceTest {
     void increaseLikeCount() {
         //given
         Member member = insertMember();
-        HotPlace hotPlace = insertHotPlace();
+        HotPlace hotPlace = insertHotPlace(member.getId());
 
         //when
         Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
@@ -175,6 +175,21 @@ class HotPlaceServiceTest {
                 .latitude(37.51113059993883)
                 .build();
         HotPlace hotPlace = HotPlace.createHotPlace(null, "hotPlace content", place, Collections.singletonList(file));
+        return hotPlaceRepository.save(hotPlace);
+    }
+
+    private HotPlace insertHotPlace(Long memberId) {
+        UploadFile file = UploadFile.builder()
+                .uploadFileName("uploadFileName.jpg")
+                .storeFileName("storeFileName.jpg")
+                .build();
+        Place place = Place.builder()
+                .placeName("롯데월드")
+                .roadAddress("서울 송파구 올림픽로 240")
+                .longitude(127.09811980036908)
+                .latitude(37.51113059993883)
+                .build();
+        HotPlace hotPlace = HotPlace.createHotPlace(memberId, "hotPlace content", place, Collections.singletonList(file));
         return hotPlaceRepository.save(hotPlace);
     }
 }

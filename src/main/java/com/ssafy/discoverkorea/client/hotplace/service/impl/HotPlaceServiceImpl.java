@@ -2,7 +2,9 @@ package com.ssafy.discoverkorea.client.hotplace.service.impl;
 
 import com.ssafy.discoverkorea.client.hotplace.HotPlace;
 import com.ssafy.discoverkorea.client.hotplace.HotPlaceImage;
+import com.ssafy.discoverkorea.client.hotplace.HotPlaceLike;
 import com.ssafy.discoverkorea.client.hotplace.Place;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.HotPlaceService;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
@@ -21,6 +23,7 @@ import java.util.NoSuchElementException;
 public class HotPlaceServiceImpl implements HotPlaceService {
 
     private final HotPlaceRepository hotPlaceRepository;
+    private final HotPlaceLikeRepository hotPlaceLikeRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -83,6 +86,20 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
     @Override
     public Long addLike(String loginId, Long hotPlaceId) {
-        return null;
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlaceLike hotPlaceLike = HotPlaceLike.builder()
+                .member(member)
+                .hotPlace(hotPlace)
+                .build();
+        HotPlaceLike savedHotPlaceLike = hotPlaceLikeRepository.save(hotPlaceLike);
+
+        hotPlace.increaseLikeCount();
+
+        return savedHotPlaceLike.getId();
     }
 }
