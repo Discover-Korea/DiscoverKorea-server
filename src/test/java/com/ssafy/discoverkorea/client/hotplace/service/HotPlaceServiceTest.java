@@ -1,7 +1,9 @@
 package com.ssafy.discoverkorea.client.hotplace.service;
 
 import com.ssafy.discoverkorea.client.hotplace.HotPlace;
+import com.ssafy.discoverkorea.client.hotplace.HotPlaceLike;
 import com.ssafy.discoverkorea.client.hotplace.Place;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
@@ -33,6 +35,8 @@ class HotPlaceServiceTest {
     private HotPlaceRepository hotPlaceRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private HotPlaceLikeRepository hotPlaceLikeRepository;
 
     @Test
     @DisplayName("핫플레이스 등록")
@@ -111,6 +115,37 @@ class HotPlaceServiceTest {
         Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
         assertThat(findHotPlace).isPresent();
         assertThat(findHotPlace.get().getHitCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("핫플레이스 좋아요 등록")
+    void addLike() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace();
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlaceLike> findHotPlaceLike = hotPlaceLikeRepository.findById(hotPlaceLikeId);
+        assertThat(findHotPlaceLike).isPresent();
+    }
+
+    @Test
+    @DisplayName("핫플레이스 좋아요수 증가")
+    void increaseLikeCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace();
+
+        //when
+        Long hotPlaceLikeId = hotPlaceService.addLike(member.getLoginId(), hotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getLikeCount()).isEqualTo(1);
     }
 
     private Member insertMember() {
