@@ -65,6 +65,10 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
     @Override
     public Long removeHotPlace(Long hotPlaceId) {
-        return null;
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        hotPlace.remove();
+        return hotPlace.getId();
     }
 }
