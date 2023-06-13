@@ -115,4 +115,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         hotPlaceLikeRepository.deleteById(hotPlaceLikeId);
         return hotPlaceLikeId;
     }
+
+    @Override
+    public Long addScrap(String loginId, Long hotPlaceId) {
+        return null;
+    }
 }
