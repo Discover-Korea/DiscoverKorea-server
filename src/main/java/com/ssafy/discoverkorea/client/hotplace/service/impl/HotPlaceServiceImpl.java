@@ -5,6 +5,7 @@ import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceScrapRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.HotPlaceService;
+import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.client.member.Member;
@@ -145,5 +146,10 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         hotPlaceScrapRepository.deleteById(hotPlaceScrapId);
         return hotPlaceScrapId;
+    }
+
+    @Override
+    public Long addComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto) {
+        return null;
     }
 }
