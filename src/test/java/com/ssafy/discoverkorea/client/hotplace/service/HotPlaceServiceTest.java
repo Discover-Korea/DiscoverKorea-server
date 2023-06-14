@@ -1,12 +1,11 @@
 package com.ssafy.discoverkorea.client.hotplace.service;
 
-import com.ssafy.discoverkorea.client.hotplace.HotPlace;
-import com.ssafy.discoverkorea.client.hotplace.HotPlaceLike;
-import com.ssafy.discoverkorea.client.hotplace.HotPlaceScrap;
-import com.ssafy.discoverkorea.client.hotplace.Place;
+import com.ssafy.discoverkorea.client.hotplace.*;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceCommentRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceScrapRepository;
+import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.client.member.Member;
@@ -41,6 +40,8 @@ class HotPlaceServiceTest {
     private HotPlaceLikeRepository hotPlaceLikeRepository;
     @Autowired
     private HotPlaceScrapRepository hotPlaceScrapRepository;
+    @Autowired
+    private HotPlaceCommentRepository hotPlaceCommentRepository;
 
     @Test
     @DisplayName("핫플레이스 등록")
@@ -261,6 +262,45 @@ class HotPlaceServiceTest {
         Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
         assertThat(findHotPlace).isPresent();
         assertThat(findHotPlace.get().getScrapCount()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("핫플레이스 댓글 등록")
+    void addComment() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace();
+        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
+                .parentId(null)
+                .content("hotPlaceComment content")
+                .build();
+
+        //when
+        Long hotPlaceCommentId = hotPlaceService.addComment(member.getLoginId(), hotPlace.getId(), dto);
+
+        //then
+        Optional<HotPlaceComment> findHotPlaceComment = hotPlaceCommentRepository.findById(hotPlaceCommentId);
+        assertThat(findHotPlaceComment).isPresent();
+    }
+    
+    @Test
+    @DisplayName("핫플레이스 댓글수 증가")
+    void increaseCommentCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace();
+        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
+                .parentId(null)
+                .content("hotPlaceComment content")
+                .build();
+
+        //when
+        Long hotPlaceCommentId = hotPlaceService.addComment(member.getLoginId(), hotPlace.getId(), dto);
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getCommentCount()).isEqualTo(1);
     }
 
     private Member insertMember() {
