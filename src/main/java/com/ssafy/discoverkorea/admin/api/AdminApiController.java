@@ -1,16 +1,16 @@
 package com.ssafy.discoverkorea.admin.api;
 
 import com.ssafy.discoverkorea.admin.admin.service.AdminService;
+import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
+import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwRequest;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
 import com.ssafy.discoverkorea.admin.api.dto.RegisterAdminRequest;
+import com.ssafy.discoverkorea.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -37,5 +37,20 @@ public class AdminApiController {
                 .build();
         Long adminId = adminService.register(dto);
         log.debug("register={}", adminId);
+    }
+
+    @ApiOperation(value = "비밀번호 변경")
+    @PutMapping("/loginPw")
+    public void editLoginPw(@Valid @RequestBody EditLoginPwRequest request) {
+        log.debug("EditLoginPwRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        EditLoginPwDto dto = EditLoginPwDto.builder()
+                .nowLoginPw(request.getNowLoginPw())
+                .newLoginPw(request.getNewLoginPw())
+                .build();
+        Long adminId = adminService.editLoginPw(loginId, dto);
+        log.debug("editLoginPw={}", adminId);
     }
 }
