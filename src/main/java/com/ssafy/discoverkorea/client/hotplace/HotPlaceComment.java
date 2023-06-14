@@ -22,7 +22,7 @@ public class HotPlaceComment extends TimeBaseEntity {
     private Long id;
     @Lob
     @Column(nullable = false)
-    private String comment;
+    private String content;
     @Embedded
     @Column(nullable = false, length = 20)
     private Active active;
@@ -38,9 +38,9 @@ public class HotPlaceComment extends TimeBaseEntity {
     private HotPlaceComment parent;
 
     @Builder
-    public HotPlaceComment(Long id, String comment, Active active, Member member, HotPlace hotPlace, HotPlaceComment parent) {
+    public HotPlaceComment(Long id, String content, Active active, Member member, HotPlace hotPlace, HotPlaceComment parent) {
         this.id = id;
-        this.comment = comment;
+        this.content = content;
         this.active = active;
         this.member = member;
         this.hotPlace = hotPlace;
