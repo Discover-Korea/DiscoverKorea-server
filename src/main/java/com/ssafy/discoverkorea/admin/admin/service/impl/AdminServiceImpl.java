@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.admin.admin.service.impl;
 import com.ssafy.discoverkorea.admin.admin.Admin;
 import com.ssafy.discoverkorea.admin.admin.repository.AdminRepository;
 import com.ssafy.discoverkorea.admin.admin.service.AdminService;
+import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,10 @@ public class AdminServiceImpl implements AdminService {
                 .build();
         Admin savedAdmin = adminRepository.save(admin);
         return savedAdmin.getId();
+    }
+
+    @Override
+    public Long editLoginPw(String loginId, EditLoginPwDto dto) {
+        return null;
     }
 }
