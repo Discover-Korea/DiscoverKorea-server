@@ -129,4 +129,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getCommentCount()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("댓글수 감소")
+    void decreaseCommentCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .commentCount(1)
+                .build();
+
+        //when
+        hotPlace.decreaseCommentCount();
+
+        //then
+        assertThat(hotPlace.getCommentCount()).isEqualTo(0);
+    }
 }
