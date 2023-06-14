@@ -1,12 +1,11 @@
 package com.ssafy.discoverkorea.client.hotplace;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
 import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class HotPlaceCommentTest {
 
@@ -22,6 +21,6 @@ class HotPlaceCommentTest {
         hotPlaceComment.remove();
 
         //then
-        assertThat(hotPlaceComment.getActive()).isEqualTo(DEACTIVE)
+        assertThat(hotPlaceComment.getActive()).isEqualTo(DEACTIVE);
     }
 }
