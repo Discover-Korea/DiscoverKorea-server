@@ -125,7 +125,28 @@ class AdminServiceTest {
 
         //then
         assertThatThrownBy(() -> adminService.editTel(admin.getLoginId(), admin.getTel()))
-                .isEqualTo(EditException.class);
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("연락처 변경#연락처 중복")
+    void duplicationNewTel() {
+        //given
+        Admin admin = insertAdmin();
+        Admin targetAdmin = adminRepository.save(Admin.builder()
+                .loginId("admin1")
+                .loginPw("admin1234!")
+                .name("관리자1")
+                .tel("010-8765-8765")
+                .email("admin1@ssafy.com")
+                .active(ACTIVE)
+                .roles(Collections.singletonList("ADMIN"))
+                .build());
+        //when
+
+        //then
+        assertThatThrownBy(() -> adminService.editTel(admin.getLoginId(), targetAdmin.getTel()))
+                .isInstanceOf(EditException.class);
     }
 
     @Test

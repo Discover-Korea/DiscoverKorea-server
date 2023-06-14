@@ -6,6 +6,7 @@ import com.ssafy.discoverkorea.admin.admin.service.AdminService;
 import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,18 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Long editTel(String loginId, String newTel) {
-        return null;
+        Admin admin = adminRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> existTel = adminRepository.existTel(newTel);
+        if (existTel.isPresent()) {
+            if (admin.getId().equals(existTel.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        admin.editTel(newTel);
+        return admin.getId();
     }
 }
