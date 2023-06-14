@@ -125,4 +125,8 @@ public class HotPlace extends TimeBaseEntity {
     public void increaseCommentCount() {
         this.commentCount += 1;
     }
+
+    public void decreaseCommentCount() {
+        this.commentCount -= 1;
+    }
 }

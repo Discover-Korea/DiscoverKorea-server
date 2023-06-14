@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -37,6 +38,7 @@ public class HotPlaceComment extends TimeBaseEntity {
     @JoinColumn(name = "parent_id")
     private HotPlaceComment parent;
 
+    //== 생성자 ==//
     @Builder
     public HotPlaceComment(Long id, String content, Active active, Member member, HotPlace hotPlace, HotPlaceComment parent) {
         this.id = id;
@@ -45,5 +47,10 @@ public class HotPlaceComment extends TimeBaseEntity {
         this.member = member;
         this.hotPlace = hotPlace;
         this.parent = parent;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void remove() {
+        this.active = DEACTIVE;
     }
 }

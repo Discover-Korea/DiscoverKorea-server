@@ -25,4 +25,6 @@ public interface HotPlaceService {
     Long cancelScrap(String loginId, Long hotPlaceId);
 
     Long addComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto);
+
+    Long removeComment(Long hotPlaceCommentId);
 }
