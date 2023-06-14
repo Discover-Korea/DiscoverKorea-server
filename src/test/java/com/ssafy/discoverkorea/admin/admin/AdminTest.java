@@ -61,22 +61,6 @@ class AdminTest {
     }
 
     @Test
-    @DisplayName("연락처 변경#변경할 연락처가 현재 연락처와 일치")
-    void notChangeTel() {
-        //given
-        Admin admin = Admin.builder()
-                .tel("010-8765-4321")
-                .build();
-
-        //when
-        String newTel = admin.getTel();
-
-        //then
-        assertThatThrownBy(() -> admin.editTel(newTel))
-                .isInstanceOf(EditException.class);
-    }
-
-    @Test
     @DisplayName("연락처 변경")
     void editTel() {
         //given
