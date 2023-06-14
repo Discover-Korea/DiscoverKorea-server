@@ -135,4 +135,13 @@ public class HotPlaceApiController {
         Long hotPlaceCommentId = hotPlaceService.addComment(loginId, hotPlaceId, dto);
         log.debug("addHotPlaceComment={}", hotPlaceCommentId);
     }
+
+    @ApiOperation(value = "핫플레이스 댓글 삭제")
+    @PostMapping("/{hotPlaceId}/comment/{commentId}")
+    public void removeHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long commentId) {
+        log.debug("hotPlaceId={}", hotPlaceId);
+
+        Long hotPlaceCommentId = hotPlaceService.removeComment(commentId);
+        log.debug("removeHotPlaceComment={}", hotPlaceCommentId);
+    }
 }
