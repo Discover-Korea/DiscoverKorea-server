@@ -303,6 +303,51 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getCommentCount()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("핫플레이스 댓글 삭제")
+    void removeComment() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        HotPlaceComment hotPlaceComment = hotPlaceCommentRepository.save(HotPlaceComment.builder()
+                .content("hotPlaceComment content")
+                .active(ACTIVE)
+                .member(member)
+                .hotPlace(hotPlace)
+                .build());
+
+        //when
+        Long findHotPlaceCommentId = hotPlaceService.removeComment(hotPlaceComment.getId());
+
+        //then
+        Optional<HotPlaceComment> findHotPlaceComment = hotPlaceCommentRepository.findById(findHotPlaceCommentId);
+        assertThat(findHotPlaceComment).isPresent();
+        assertThat(findHotPlaceComment.get().getActive()).isEqualTo(DEACTIVE);
+    }
+
+    @Test
+    @DisplayName("핫플레이스 댓글수 감소")
+    void decreaseCommentCount() {
+        //given
+        Member member = insertMember();
+        HotPlace hotPlace = insertHotPlace(member.getId());
+        hotPlace.increaseCommentCount();
+        HotPlaceComment hotPlaceComment = hotPlaceCommentRepository.save(HotPlaceComment.builder()
+                .content("hotPlaceComment content")
+                .active(ACTIVE)
+                .member(member)
+                .hotPlace(hotPlace)
+                .build());
+
+        //when
+        Long findHotPlaceCommentId = hotPlaceService.removeComment(hotPlaceComment.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlace.getId());
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getCommentCount()).isEqualTo(0);
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .loginId("ssafy")
