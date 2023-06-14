@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.admin.admin.service;
 
 import com.ssafy.discoverkorea.admin.admin.Admin;
 import com.ssafy.discoverkorea.admin.admin.repository.AdminRepository;
+import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
 import org.junit.jupiter.api.DisplayName;
@@ -92,6 +93,25 @@ class AdminServiceTest {
         //then
         Optional<Admin> findAdmin = adminRepository.findById(adminId);
         assertThat(findAdmin).isPresent();
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경")
+    void editLoginPw() {
+        //given
+        Admin admin = insertAdmin();
+        EditLoginPwDto dto = EditLoginPwDto.builder()
+                .nowLoginPw(admin.getLoginPw())
+                .newLoginPw(admin.getLoginPw() + "@")
+                .build();
+
+        //when
+        Long adminId = adminService.editLoginPw(admin.getLoginId(), dto);
+
+        //then
+        Optional<Admin> findAdmin = adminRepository.findById(adminId);
+        assertThat(findAdmin).isPresent();
+        assertThat(findAdmin.get().getLoginPw()).isEqualTo(dto.getNewLoginPw());
     }
 
     private Admin insertAdmin() {
