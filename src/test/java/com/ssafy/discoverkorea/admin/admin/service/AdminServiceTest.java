@@ -5,6 +5,7 @@ import com.ssafy.discoverkorea.admin.admin.repository.AdminRepository;
 import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
 import com.ssafy.discoverkorea.common.exception.DuplicateException;
+import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,35 @@ class AdminServiceTest {
         Optional<Admin> findAdmin = adminRepository.findById(adminId);
         assertThat(findAdmin).isPresent();
         assertThat(findAdmin.get().getLoginPw()).isEqualTo(dto.getNewLoginPw());
+    }
+
+    @Test
+    @DisplayName("연락처 변경#기존 연락처와 일치")
+    void equalBeforeTel() {
+        //given
+        Admin admin = insertAdmin();
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> adminService.editTel(admin.getLoginId(), admin.getTel()))
+                .isEqualTo(EditException.class);
+    }
+
+    @Test
+    @DisplayName("연락처 변경")
+    void editTel() {
+        //given
+        Admin admin = insertAdmin();
+        String newTel = admin.getTel().replace("4321", "1111");
+
+        //when
+        Long adminId = adminService.editTel(admin.getLoginId(), newTel);
+
+        //then
+        Optional<Admin> findAdmin = adminRepository.findById(adminId);
+        assertThat(findAdmin).isPresent();
+        assertThat(findAdmin.get().getTel()).isEqualTo(newTel);
     }
 
     private Admin insertAdmin() {
