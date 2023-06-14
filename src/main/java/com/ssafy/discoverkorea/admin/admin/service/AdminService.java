@@ -10,4 +10,6 @@ public interface AdminService {
     Long register(RegisterAdminDto dto);
 
     Long editLoginPw(String loginId, EditLoginPwDto dto);
+
+    Long editTel(String loginId, String newTel);
 }

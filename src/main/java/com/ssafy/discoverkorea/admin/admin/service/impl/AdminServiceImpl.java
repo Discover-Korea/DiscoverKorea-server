@@ -59,4 +59,9 @@ public class AdminServiceImpl implements AdminService {
         admin.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
         return admin.getId();
     }
+
+    @Override
+    public Long editTel(String loginId, String newTel) {
+        return null;
+    }
 }
