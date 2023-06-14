@@ -173,4 +173,9 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         hotPlace.increaseCommentCount();
         return savedHotPlaceComment.getId();
     }
+
+    @Override
+    public Long removeComment(Long hotPlaceCommentId) {
+        return null;
+    }
 }
