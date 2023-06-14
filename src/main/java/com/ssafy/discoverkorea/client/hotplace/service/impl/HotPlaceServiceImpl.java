@@ -1,10 +1,12 @@
 package com.ssafy.discoverkorea.client.hotplace.service.impl;
 
 import com.ssafy.discoverkorea.client.hotplace.*;
+import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceCommentRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceLikeRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.discoverkorea.client.hotplace.repository.HotPlaceScrapRepository;
 import com.ssafy.discoverkorea.client.hotplace.service.HotPlaceService;
+import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.client.member.Member;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+
 @Service
 @RequiredArgsConstructor
 public class HotPlaceServiceImpl implements HotPlaceService {
@@ -23,6 +27,7 @@ public class HotPlaceServiceImpl implements HotPlaceService {
     private final HotPlaceRepository hotPlaceRepository;
     private final HotPlaceLikeRepository hotPlaceLikeRepository;
     private final HotPlaceScrapRepository hotPlaceScrapRepository;
+    private final HotPlaceCommentRepository hotPlaceCommentRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -145,5 +150,27 @@ public class HotPlaceServiceImpl implements HotPlaceService {
 
         hotPlaceScrapRepository.deleteById(hotPlaceScrapId);
         return hotPlaceScrapId;
+    }
+
+    @Override
+    public Long addComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlace hotPlace = hotPlaceRepository.findById(hotPlaceId)
+                .orElseThrow(NoSuchElementException::new);
+
+        HotPlaceComment hotPlaceComment = HotPlaceComment.builder()
+                .content(dto.getContent())
+                .active(ACTIVE)
+                .member(member)
+                .hotPlace(hotPlace)
+                .parent(HotPlaceComment.builder().id(dto.getParentId()).build())
+                .build();
+
+        HotPlaceComment savedHotPlaceComment = hotPlaceCommentRepository.save(hotPlaceComment);
+
+        hotPlace.increaseCommentCount();
+        return savedHotPlaceComment.getId();
     }
 }

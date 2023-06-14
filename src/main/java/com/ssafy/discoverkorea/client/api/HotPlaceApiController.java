@@ -1,8 +1,10 @@
 package com.ssafy.discoverkorea.client.api;
 
+import com.ssafy.discoverkorea.client.api.request.hotplace.AddHotPlaceCommentRequest;
 import com.ssafy.discoverkorea.client.api.request.hotplace.AddHotPlaceRequest;
 import com.ssafy.discoverkorea.client.api.request.hotplace.EditHotPlaceRequest;
 import com.ssafy.discoverkorea.client.hotplace.service.HotPlaceService;
+import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.discoverkorea.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.discoverkorea.common.FileStore;
@@ -117,5 +119,20 @@ public class HotPlaceApiController {
 
         Long hotPlaceLikeId = hotPlaceService.cancelScrap(loginId, hotPlaceId);
         log.debug("cancelPlaceScrap={}", hotPlaceLikeId);
+    }
+
+    @ApiOperation(value = "핫플레이스 댓글 등록")
+    @PostMapping("/{hotPlaceId}/comment")
+    public void addHotPlaceComment(@PathVariable Long hotPlaceId, @Valid @RequestBody AddHotPlaceCommentRequest request) {
+        log.debug("AddHotPlaceCommentRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
+                .parentId(request.getParentId())
+                .content(request.getContent())
+                .build();
+        Long hotPlaceCommentId = hotPlaceService.addComment(loginId, hotPlaceId, dto);
+        log.debug("addHotPlaceComment={}", hotPlaceCommentId);
     }
 }
