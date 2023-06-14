@@ -2,9 +2,10 @@ package com.ssafy.discoverkorea.admin.api;
 
 import com.ssafy.discoverkorea.admin.admin.service.AdminService;
 import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
-import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwRequest;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
-import com.ssafy.discoverkorea.admin.api.dto.RegisterAdminRequest;
+import com.ssafy.discoverkorea.admin.api.request.admin.EditLoginPwRequest;
+import com.ssafy.discoverkorea.admin.api.request.admin.EditTelRequest;
+import com.ssafy.discoverkorea.admin.api.request.admin.RegisterAdminRequest;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,5 +53,16 @@ public class AdminApiController {
                 .build();
         Long adminId = adminService.editLoginPw(loginId, dto);
         log.debug("editLoginPw={}", adminId);
+    }
+
+    @ApiOperation(value = "연락처 변경")
+    @PutMapping("/tel")
+    public void editTel(@Valid @RequestBody EditTelRequest request) {
+        log.debug("EditTelRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long adminId = adminService.editTel(loginId, request.getNewTel());
+        log.debug("editTel={}", adminId);
     }
 }

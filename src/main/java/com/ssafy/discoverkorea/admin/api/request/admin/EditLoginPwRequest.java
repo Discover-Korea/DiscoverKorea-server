@@ -1,4 +1,4 @@
-package com.ssafy.discoverkorea.admin.admin.service.dto;
+package com.ssafy.discoverkorea.admin.api.request.admin;
 
 import lombok.Data;
 
