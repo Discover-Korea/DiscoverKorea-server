@@ -114,4 +114,19 @@ class HotPlaceTest {
         //then
         assertThat(hotPlace.getScrapCount()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("댓글수 증가")
+    void increaseCommentCount() {
+        //given
+        HotPlace hotPlace = HotPlace.builder()
+                .commentCount(0)
+                .build();
+
+        //when
+        hotPlace.increaseCommentCount();
+
+        //then
+        assertThat(hotPlace.getCommentCount()).isEqualTo(1);
+    }
 }
