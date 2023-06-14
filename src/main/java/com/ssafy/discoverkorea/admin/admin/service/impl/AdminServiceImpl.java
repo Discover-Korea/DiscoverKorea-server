@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
@@ -52,6 +53,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Long editLoginPw(String loginId, EditLoginPwDto dto) {
-        return null;
+        Admin admin = adminRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        admin.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
+        return admin.getId();
     }
 }
