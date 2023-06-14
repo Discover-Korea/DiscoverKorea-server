@@ -269,7 +269,7 @@ class HotPlaceServiceTest {
     void addComment() {
         //given
         Member member = insertMember();
-        HotPlace hotPlace = insertHotPlace();
+        HotPlace hotPlace = insertHotPlace(member.getId());
         AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
                 .parentId(null)
                 .content("hotPlaceComment content")
@@ -288,7 +288,7 @@ class HotPlaceServiceTest {
     void increaseCommentCount() {
         //given
         Member member = insertMember();
-        HotPlace hotPlace = insertHotPlace();
+        HotPlace hotPlace = insertHotPlace(member.getId());
         AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
                 .parentId(null)
                 .content("hotPlaceComment content")
