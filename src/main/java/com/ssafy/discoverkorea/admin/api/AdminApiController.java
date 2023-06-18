@@ -77,4 +77,13 @@ public class AdminApiController {
         Long adminId = adminService.editEmail(loginId, request.getEmail());
         log.debug("editEmail={}", adminId);
     }
+
+    @ApiOperation(value = "관리자 삭제")
+    @DeleteMapping("/{adminId}")
+    public void removeAdmin(@PathVariable Long adminId) {
+        log.debug("adminId={}", adminId);
+
+        Long removedAdminId = adminService.remove(adminId);
+        log.debug("removeAdmin={}", removedAdminId);
+    }
 }
