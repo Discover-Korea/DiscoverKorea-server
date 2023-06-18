@@ -3,6 +3,7 @@ package com.ssafy.discoverkorea.admin.api;
 import com.ssafy.discoverkorea.admin.admin.service.AdminService;
 import com.ssafy.discoverkorea.admin.admin.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.admin.admin.service.dto.RegisterAdminDto;
+import com.ssafy.discoverkorea.admin.api.request.admin.EditEmailRequest;
 import com.ssafy.discoverkorea.admin.api.request.admin.EditLoginPwRequest;
 import com.ssafy.discoverkorea.admin.api.request.admin.EditTelRequest;
 import com.ssafy.discoverkorea.admin.api.request.admin.RegisterAdminRequest;
@@ -64,5 +65,16 @@ public class AdminApiController {
 
         Long adminId = adminService.editTel(loginId, request.getNewTel());
         log.debug("editTel={}", adminId);
+    }
+
+    @ApiOperation(value = "이메일 변경")
+    @PutMapping("/email")
+    public void editEmail(@Valid @RequestBody EditEmailRequest request) {
+        log.debug("EditEmailRequest={}", request);
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+
+        Long adminId = adminService.editEmail(loginId, request.getEmail());
+        log.debug("editEmail={}", adminId);
     }
 }
