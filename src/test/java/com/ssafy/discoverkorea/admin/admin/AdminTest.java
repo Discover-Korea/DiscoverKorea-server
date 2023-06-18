@@ -75,4 +75,20 @@ class AdminTest {
         //then
         assertThat(admin.getTel()).isEqualTo(newTel);
     }
+
+    @Test
+    @DisplayName("이메일 변경")
+    void editEmail() {
+        //given
+        Admin admin = Admin.builder()
+                .email("ssafy@ssafy.com")
+                .build();
+
+        //when
+        String newEmail = admin.getEmail().replace("ssafy@", "ssafy1@");
+        admin.editEmail(newEmail);
+
+        //then
+        assertThat(admin.getEmail()).isEqualTo(newEmail);
+    }
 }
