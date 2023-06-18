@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -215,6 +216,21 @@ class AdminServiceTest {
         Optional<Admin> findAdmin = adminRepository.findById(adminId);
         assertThat(findAdmin).isPresent();
         assertThat(findAdmin.get().getEmail()).isEqualTo(newEmail);
+    }
+
+    @Test
+    @DisplayName("관리자 삭제")
+    void remove() {
+        //given
+        Admin admin = insertAdmin();
+
+        //when
+        Long adminId = adminService.remove(admin.getId());
+
+        //then
+        Optional<Admin> findAdmin = adminRepository.findById(adminId);
+        assertThat(findAdmin).isPresent();
+        assertThat(findAdmin.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private Admin insertAdmin() {
