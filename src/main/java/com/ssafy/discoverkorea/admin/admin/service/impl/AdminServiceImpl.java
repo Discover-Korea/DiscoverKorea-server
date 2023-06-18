@@ -80,6 +80,18 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Long editEmail(String loginId, String newEmail) {
-        return null;
+        Admin admin = adminRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Optional<Long> existEmail = adminRepository.existEmail(newEmail);
+        if (existEmail.isPresent()) {
+            if (admin.getId().equals(existEmail.get())) {
+                throw new EditException();
+            }
+            throw new EditException();
+        }
+
+        admin.editEmail(newEmail);
+        return admin.getId();
     }
 }
