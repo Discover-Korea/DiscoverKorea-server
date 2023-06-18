@@ -165,6 +165,58 @@ class AdminServiceTest {
         assertThat(findAdmin.get().getTel()).isEqualTo(newTel);
     }
 
+    @Test
+    @DisplayName("이메일 변경#기존 이메일과 일치")
+    void equalBeforeEmail() {
+        //given
+        Admin admin = insertAdmin();
+
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> adminService.editEmail(admin.getLoginId(), admin.getEmail()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("이메일 변경#이메일 중복")
+    void duplicationNewEmail() {
+        //given
+        Admin admin = insertAdmin();
+        Admin targetAdmin = adminRepository.save(Admin.builder()
+                .loginId("admin1")
+                .loginPw("admin1234!")
+                .name("관리자1")
+                .tel("010-8765-8765")
+                .email("admin1@ssafy.com")
+                .active(ACTIVE)
+                .roles(Collections.singletonList("ADMIN"))
+                .build());
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> adminService.editEmail(admin.getLoginId(), targetAdmin.getEmail()))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("이메일 변경")
+    void editEmail() {
+        //given
+        Admin admin = insertAdmin();
+        String newEmail = admin.getEmail().replace("ssafy@", "ssafy1@");
+
+        //when
+        Long adminId = adminService.editEmail(admin.getLoginId(), newEmail);
+
+        //then
+        Optional<Admin> findAdmin = adminRepository.findById(adminId);
+        assertThat(findAdmin).isPresent();
+        assertThat(findAdmin.get().getEmail()).isEqualTo(newEmail);
+    }
+
     private Admin insertAdmin() {
         Admin admin = Admin.builder()
                 .loginId("admin")
