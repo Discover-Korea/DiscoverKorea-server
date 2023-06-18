@@ -77,4 +77,9 @@ public class AdminServiceImpl implements AdminService {
         admin.editTel(newTel);
         return admin.getId();
     }
+
+    @Override
+    public Long editEmail(String loginId, String newEmail) {
+        return null;
+    }
 }
