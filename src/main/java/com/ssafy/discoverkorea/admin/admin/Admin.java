@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
 
@@ -76,6 +77,10 @@ public class Admin extends TimeBaseEntity implements UserDetails {
 
     public void editEmail(String newEmail) {
         this.email = newEmail;
+    }
+
+    public void remove() {
+        this.active = DEACTIVE;
     }
 
     //== 시큐리티 설정 ==//

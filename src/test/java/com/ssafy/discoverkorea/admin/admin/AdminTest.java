@@ -4,6 +4,8 @@ import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
+import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -90,5 +92,20 @@ class AdminTest {
 
         //then
         assertThat(admin.getEmail()).isEqualTo(newEmail);
+    }
+
+    @Test
+    @DisplayName("관리자 삭제")
+    void remove() {
+        //given
+        Admin admin = Admin.builder()
+                .active(ACTIVE)
+                .build();
+
+        //when
+        admin.remove();
+
+        //then
+        assertThat(admin.getActive()).isEqualTo(DEACTIVE);
     }
 }

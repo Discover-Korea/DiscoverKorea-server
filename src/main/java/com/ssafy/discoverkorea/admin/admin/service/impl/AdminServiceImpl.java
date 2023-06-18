@@ -94,4 +94,13 @@ public class AdminServiceImpl implements AdminService {
         admin.editEmail(newEmail);
         return admin.getId();
     }
+
+    @Override
+    public Long remove(Long adminId) {
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(NoSuchElementException::new);
+
+        admin.remove();
+        return admin.getId();
+    }
 }
