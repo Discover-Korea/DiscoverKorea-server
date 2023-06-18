@@ -74,6 +74,10 @@ public class Admin extends TimeBaseEntity implements UserDetails {
         this.tel = newTel;
     }
 
+    public void editEmail(String newEmail) {
+
+    }
+
     //== 시큐리티 설정 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
