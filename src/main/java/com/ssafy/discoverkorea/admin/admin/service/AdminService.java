@@ -14,4 +14,6 @@ public interface AdminService {
     Long editTel(String loginId, String newTel);
 
     Long editEmail(String loginId, String newEmail);
+
+    Long remove(Long adminId);
 }
