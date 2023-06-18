@@ -78,6 +78,10 @@ public class Admin extends TimeBaseEntity implements UserDetails {
         this.email = newEmail;
     }
 
+    public void remove() {
+
+    }
+
     //== 시큐리티 설정 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
