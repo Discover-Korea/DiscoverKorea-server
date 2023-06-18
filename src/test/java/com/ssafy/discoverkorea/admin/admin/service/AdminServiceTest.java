@@ -206,7 +206,7 @@ class AdminServiceTest {
     void editEmail() {
         //given
         Admin admin = insertAdmin();
-        String newEmail = admin.getEmail().replace("ssafy@", "ssafy1@");
+        String newEmail = admin.getEmail().replace("admin@", "admin1@");
 
         //when
         Long adminId = adminService.editEmail(admin.getLoginId(), newEmail);
