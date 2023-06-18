@@ -75,7 +75,7 @@ public class Admin extends TimeBaseEntity implements UserDetails {
     }
 
     public void editEmail(String newEmail) {
-
+        this.email = newEmail;
     }
 
     //== 시큐리티 설정 ==//
