@@ -1,7 +1,7 @@
 package com.ssafy.discoverkorea.config;
 
-import com.ssafy.discoverkorea.jwt.JwtTokenProvider;
 import com.ssafy.discoverkorea.jwt.JwtAuthenticationFilter;
+import com.ssafy.discoverkorea.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
