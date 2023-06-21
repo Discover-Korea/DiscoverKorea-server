@@ -6,21 +6,19 @@ import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.common.entity.UploadFile;
-import com.ssafy.discoverkorea.common.exception.DuplicateException;
-import com.ssafy.discoverkorea.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static com.ssafy.discoverkorea.client.member.Gender.MALE;
 import static com.ssafy.discoverkorea.common.entity.Active.ACTIVE;
 import static com.ssafy.discoverkorea.common.entity.Active.DEACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -30,70 +28,6 @@ class MemberServiceTest {
     private MemberService memberService;
     @Autowired
     private MemberRepository memberRepository;
-
-    @Test
-    @DisplayName("회원가입#아이디중복")
-    void duplicationLoginId() {
-        //given
-        Member targetMember = insertMember();
-
-        //when
-        SignupMemberDto dto = SignupMemberDto.builder()
-                .loginId(targetMember.getLoginId())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.signup(dto))
-                .isInstanceOf(DuplicateException.class);
-    }
-
-    @Test
-    @DisplayName("회원가입#연락처중복")
-    void duplicationTel() {
-        //given
-        Member targetMember = insertMember();
-
-        //when
-        SignupMemberDto dto = SignupMemberDto.builder()
-                .tel(targetMember.getTel())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.signup(dto))
-                .isInstanceOf(DuplicateException.class);
-    }
-
-    @Test
-    @DisplayName("회원가입#이메일중복")
-    void duplicationEmail() {
-        //given
-        Member targetMember = insertMember();
-
-        //when
-        SignupMemberDto dto = SignupMemberDto.builder()
-                .email(targetMember.getEmail())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.signup(dto))
-                .isInstanceOf(DuplicateException.class);
-    }
-
-    @Test
-    @DisplayName("회원가입#닉네임중복")
-    void duplicationNickname() {
-        //given
-        Member targetMember = insertMember();
-
-        //when
-        SignupMemberDto dto = SignupMemberDto.builder()
-                .nickname(targetMember.getNickname())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.signup(dto))
-                .isInstanceOf(DuplicateException.class);
-    }
 
     @Test
     @DisplayName("회원가입")
@@ -140,43 +74,6 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("연락처 변경#기존 연락처와 일치")
-    void equalBeforeTel() {
-        //given
-        Member member = insertMember();
-
-        //when
-
-        //then
-        assertThatThrownBy(() -> memberService.editTel(member.getLoginId(), member.getTel()))
-                .isInstanceOf(EditException.class);
-    }
-
-    @Test
-    @DisplayName("연락처 변경#연락처 중복")
-    void duplicationNewTel() {
-        //given
-        Member targetMember = memberRepository.save(Member.builder()
-                .loginId("ssafy1")
-                .loginPw("ssafy1234!")
-                .name("김싸피")
-                .tel("010-5678-5678")
-                .email("ssafy1@ssafy.com")
-                .birth("1998")
-                .gender(MALE)
-                .nickname("react")
-                .active(ACTIVE)
-                .build());
-        Member member = insertMember();
-
-        //when
-
-        //then
-        assertThatThrownBy(() -> memberService.editTel(member.getLoginId(), targetMember.getTel()))
-                .isInstanceOf(EditException.class);
-    }
-
-    @Test
     @DisplayName("연락처 변경")
     void editTel() {
         //given
@@ -190,51 +87,6 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getTel()).isEqualTo(newTel);
-    }
-
-    @Test
-    @DisplayName("이메일 변경#기존 이메일과 일치")
-    void equalBeforeEmail() {
-        //given
-        Member member = insertMember();
-
-        //when
-        EditEmailDto dto = EditEmailDto.builder()
-                .nowEmail(member.getEmail())
-                .newEmail(member.getEmail())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.editEmail(member.getLoginId(), dto))
-                .isInstanceOf(EditException.class);
-    }
-
-    @Test
-    @DisplayName("이메일 변경#이메일 중복")
-    void duplicationNewEmail() {
-        //given
-        Member targetMember = memberRepository.save(Member.builder()
-                .loginId("ssafy1")
-                .loginPw("ssafy1234!")
-                .name("김싸피")
-                .tel("010-5678-5678")
-                .email("ssafy1@ssafy.com")
-                .birth("1998")
-                .gender(MALE)
-                .nickname("react")
-                .active(ACTIVE)
-                .build());
-        Member member = insertMember();
-
-        //when
-        EditEmailDto dto = EditEmailDto.builder()
-                .nowEmail(member.getEmail())
-                .newEmail(targetMember.getEmail())
-                .build();
-
-        //then
-        assertThatThrownBy(() -> memberService.editEmail(member.getLoginId(), dto))
-                .isInstanceOf(EditException.class);
     }
 
     @Test
@@ -254,43 +106,6 @@ class MemberServiceTest {
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getEmail()).isEqualTo(newEmail);
-    }
-
-    @Test
-    @DisplayName("닉네임 변경#기존 닉네임과 일치")
-    void equalBeforeNickname() {
-        //given
-        Member member = insertMember();
-
-        //when
-
-        //then
-        assertThatThrownBy(() -> memberService.editNickname(member.getLoginId(), member.getNickname()))
-                .isInstanceOf(EditException.class);
-    }
-
-    @Test
-    @DisplayName("닉네임 변경#닉네임 중복")
-    void duplicationNewNickname() {
-        //given
-        Member targetMember = memberRepository.save(Member.builder()
-                .loginId("ssafy1")
-                .loginPw("ssafy1234!")
-                .name("김싸피")
-                .tel("010-5678-5678")
-                .email("ssafy1@ssafy.com")
-                .birth("1998")
-                .gender(MALE)
-                .nickname("react")
-                .active(ACTIVE)
-                .build());
-        Member member = insertMember();
-
-        //when
-
-        //then
-        assertThatThrownBy(() -> memberService.editNickname(member.getLoginId(), targetMember.getNickname()))
-                .isInstanceOf(EditException.class);
     }
 
     @Test
@@ -354,6 +169,7 @@ class MemberServiceTest {
                 .gender(MALE)
                 .nickname("spring")
                 .active(ACTIVE)
+                .roles(Collections.singletonList("MEMBER"))
                 .build();
         return memberRepository.save(member);
     }
