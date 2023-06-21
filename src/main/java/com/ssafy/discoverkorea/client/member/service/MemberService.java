@@ -24,56 +24,44 @@ public class MemberService {
 
     public Long signup(SignupMemberDto dto) {
         Member member = createMember(dto);
-
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
     }
 
     public Long editLoginPw(String loginId, EditLoginPwDto dto) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-
-        findMember.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.editLoginPw(dto.getNowLoginPw(), dto.getNewLoginPw());
+        return member.getId();
     }
 
     public Long editTel(String loginId, String newTel) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-        findMember.editTel(newTel);
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.editTel(newTel);
+        return member.getId();
     }
 
     public Long editEmail(String loginId, EditEmailDto dto) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-
-        findMember.editEmail(dto.getNewEmail());
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.editEmail(dto.getNewEmail());
+        return member.getId();
     }
 
     public Long editNickname(String loginId, String newNickname) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-
-        findMember.editNickname(newNickname);
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.editNickname(newNickname);
+        return member.getId();
     }
 
     public Long editProfile(String loginId, UploadFile uploadFile) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-
-        findMember.editProfile(uploadFile);
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.editProfile(uploadFile);
+        return member.getId();
     }
 
     public Long withdrawal(String loginId, String loginPw) {
-        Member findMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(NoSuchElementException::new);
-
-        findMember.withdrawal(loginPw);
-        return findMember.getId();
+        Member member = getMember(loginId);
+        member.withdrawal(loginPw);
+        return member.getId();
     }
 
     private Member createMember(SignupMemberDto dto) {
@@ -90,5 +78,10 @@ public class MemberService {
                 .active(ACTIVE)
                 .roles(Collections.singletonList("MEMBER"))
                 .build();
+    }
+
+    private Member getMember(String loginId) {
+        return memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
