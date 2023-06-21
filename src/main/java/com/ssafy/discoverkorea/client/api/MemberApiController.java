@@ -1,6 +1,7 @@
 package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.member.*;
+import com.ssafy.discoverkorea.client.member.service.MemberQueryService;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.EditEmailDto;
 import com.ssafy.discoverkorea.client.member.service.dto.EditLoginPwDto;
@@ -27,6 +28,7 @@ import java.io.IOException;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "비밀번호 변경")
@@ -51,6 +53,8 @@ public class MemberApiController {
         String loginId = SecurityUtil.getCurrentLoginId();
         log.debug("loginId={}", loginId);
 
+        memberQueryService.existTel(request.getNewTel());
+
         Long memberId = memberService.editTel(loginId, request.getNewTel());
         log.debug("editTel member={}", memberId);
     }
@@ -62,6 +66,7 @@ public class MemberApiController {
         String loginId = SecurityUtil.getCurrentLoginId();
         log.debug("loginId={}", loginId);
 
+        memberQueryService.existEmail(request.getNewEmail());
         EditEmailDto dto = EditEmailDto.builder()
                 .newEmail(request.getNewEmail())
                 .build();
@@ -76,6 +81,7 @@ public class MemberApiController {
         String loginId = SecurityUtil.getCurrentLoginId();
         log.debug("loginId={}", loginId);
 
+        memberQueryService.existNickname(request.getNewNickname());
         Long memberId = memberService.editNickname(loginId, request.getNewNickname());
         log.debug("editNickname member={}", memberId);
     }

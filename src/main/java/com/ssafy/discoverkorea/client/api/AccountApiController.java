@@ -2,6 +2,7 @@ package com.ssafy.discoverkorea.client.api;
 
 import com.ssafy.discoverkorea.client.api.request.member.*;
 import com.ssafy.discoverkorea.client.member.service.AccountService;
+import com.ssafy.discoverkorea.client.member.service.MemberQueryService;
 import com.ssafy.discoverkorea.client.member.service.MemberService;
 import com.ssafy.discoverkorea.client.member.service.dto.SignupMemberDto;
 import com.ssafy.discoverkorea.jwt.SecurityUtil;
@@ -26,11 +27,18 @@ public class AccountApiController {
 
     private final MemberService memberService;
     private final AccountService accountService;
+    private final MemberQueryService memberQueryService;
 
     @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
     public void signup(@Valid @RequestBody SignupMemberRequest request) {
         log.debug("SignupMemberRequest={}", request);
+
+        memberQueryService.existLoginId(request.getLoginId());
+        memberQueryService.existTel(request.getTel());
+        memberQueryService.existEmail(request.getEmail());
+        memberQueryService.existNickname(request.getNickname());
+
         SignupMemberDto dto = toSignupMemberDto(request);
 
         Long memberId = memberService.signup(dto);
